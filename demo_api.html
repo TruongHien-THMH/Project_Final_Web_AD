@@ -1,0 +1,54 @@
+<!-- Thử fetch API về từ API Free. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảo Phát thảo cho API</title>
+</head>
+<body>
+    
+</body>
+<script>
+    const getFilmAPI = () => {
+        return new Promise((resolve, reject) => {
+            const options = {method: 'GET', headers: {accept: 'application/json'}};
+            const apiKey = '6f6bf7101ae6e531a8f5faa0c40418a5'; // Phải mã hoá sau này.
+            const url = 'https://api.themoviedb.org/3/movie/now_playing?api_key='+ apiKey + '&language=en-US&page=1';
+
+
+            fetch(url, options)
+                .then(res => {
+                    if(!res.ok) {
+                        throw new Error('LỖI API: KHÔNG CÓ PHẢN HỒI')
+                    }
+                    return res.json(); 
+                })
+                .then(data => {
+                    resolve(data.results)
+                })
+                .catch(error => {
+                    reject(error)
+                })
+        })
+    }
+
+    getFilmAPI()
+        .then(data => {
+            console.log('Đã kết nối');
+            
+            for(let i = 0; i <= data.length; i++) {
+                console.log('Số phim đã lấy được: ' + (i+1));
+                console.log(`🎬 ${data[i].title}`);
+                console.log(`⭐ Rate: ${data[i].vote_average}`);
+                console.log(`👁 Views: ${data[i].popularity}`);
+                console.log(`📅 Lịch chiếu: ${data[i].release_date}`);
+                console.log('-----------------------------');
+            }
+        })
+        .catch(error => {
+            console.log(error);  
+        })
+</script>
+</html>

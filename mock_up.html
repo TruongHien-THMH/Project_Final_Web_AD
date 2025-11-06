@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bảng phác thảo cho PROJECT</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <!-- Icon (RemixIcon CDN cho icon search) -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-black text-white relative">
+    <!-- Header -->
+    <header
+      class="absolute top-0 left-0 w-full z-50 flex justify-between items-center px-8 py-4 bg-transparent"
+    >
+      <!-- Logo -->
+      <div class="text-2xl font-bold">
+        <span class="text-pink-500">VNUK</span>Final
+      </div>
+
+      <!-- Navigation -->
+      <nav
+        class="hidden md:flex bg-black/40 backdrop-blur-none px-8 py-2 rounded-full space-x-6 text-white text-sm"
+      >
+        <a href="#" class="hover:text-pink-400 transition">Home</a>
+        <a href="#" class="hover:text-pink-400 transition">Movies</a>
+        <a href="#" class="hover:text-pink-400 transition">Theatres</a>
+        <a href="#" class="hover:text-pink-400 transition">Releases</a>
+      </nav>
+
+      <!-- Search + Login -->
+      <div class="flex items-center space-x-4">
+        <button class="text-white text-lg">
+          <i class="ri-search-line"></i>
+        </button>
+        <button
+          class="bg-pink-500 hover:bg-pink-600 transition text-white px-5 py-2 rounded-full"
+        >
+          Log In
+        </button>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section
+      class="relative h-screen flex items-center px-10 md:px-20"
+      style="
+        background-color: #000;
+        background-size: cover;
+        background-position: center;
+      "
+    >
+      <!-- Overlay -->
+      <div class="absolute inset-0 bg-black/60"></div>
+
+      <!-- Nội dung phim -->
+      <div class="relative z-10 max-w-2xl">
+        <h1 class="text-5xl font-bold mb-4 leading-tight">
+          Guardians of the Galaxy
+        </h1>
+
+        <div class="flex items-center text-sm text-gray-300 space-x-4 mb-4">
+          <span>Action | Adventure | Sci-Fi</span>
+          <span>•</span>
+          <span>2018</span>
+          <span>•</span>
+          <span>2h 8m</span>
+        </div>
+
+        <p class="text-gray-300 mb-6">
+          In a post-apocalyptic world where cities ride on wheels and consume
+          each other to survive, two people meet in London and try to stop a
+          conspiracy.
+        </p>
+
+        <button
+          class="bg-pink-500 hover:bg-pink-600 transition px-6 py-3 rounded-full font-medium"
+        >
+          Book Now
+        </button>
+      </div>
+    </section>
+
+    <!-- Now Showing Section -->
+    <section class="bg-[#0b0b0b] text-white py-16 px-6 md:px-16">
+      <!-- Tiêu đề -->
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-2xl font-semibold">Now Showing</h2>
+        <a
+          href="#"
+          class="text-gray-300 text-sm hover:text-pink-400 transition flex items-center gap-1"
+        >
+          View All <i class="ri-arrow-right-line"></i>
+        </a>
+      </div>
+
+      <!-- Grid phim -->
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+      >
+        <!-- Card 1 -->
+        <div
+          class="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition"
+        >
+          <div
+            class="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold"
+          >
+            A
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold mb-2">Tiêu đề phim 1</h3>
+            <p class="text-sm text-gray-400 mb-4">
+              2018 - Action, Adventure - 2h 8m
+            </p>
+            <div class="flex justify-between items-center">
+              <button
+                class="bg-pink-500 hover:bg-pink-600 transition text-white px-4 py-2 rounded-full text-sm"
+              >
+                Buy Ticket
+              </button>
+              <div class="flex items-center gap-1 text-gray-300">
+                <i class="ri-star-fill text-pink-500"></i>
+                <span>4.5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div
+          class="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition"
+        >
+          <div
+            class="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold"
+          >
+            B
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold mb-2">Tiêu đề phim 2</h3>
+            <p class="text-sm text-gray-400 mb-4">
+              2018 - Action, Adventure - 2h 8m
+            </p>
+            <div class="flex justify-between items-center">
+              <button
+                class="bg-pink-500 hover:bg-pink-600 transition text-white px-4 py-2 rounded-full text-sm"
+              >
+                Buy Ticket
+              </button>
+              <div class="flex items-center gap-1 text-gray-300">
+                <i class="ri-star-fill text-pink-500"></i>
+                <span>4.5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div
+          class="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition"
+        >
+          <div
+            class="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold"
+          >
+            C
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold mb-2">Tiêu đề phim 3</h3>
+            <p class="text-sm text-gray-400 mb-4">
+              2018 - Action, Adventure - 2h 8m
+            </p>
+            <div class="flex justify-between items-center">
+              <button
+                class="bg-pink-500 hover:bg-pink-600 transition text-white px-4 py-2 rounded-full text-sm"
+              >
+                Buy Ticket
+              </button>
+              <div class="flex items-center gap-1 text-gray-300">
+                <i class="ri-star-fill text-pink-500"></i>
+                <span>4.5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div
+          class="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition"
+        >
+          <div
+            class="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold"
+          >
+            D
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold mb-2">Tiêu đề phim 4</h3>
+            <p class="text-sm text-gray-400 mb-4">
+              2018 - Action, Adventure - 2h 8m
+            </p>
+            <div class="flex justify-between items-center">
+              <button
+                class="bg-pink-500 hover:bg-pink-600 transition text-white px-4 py-2 rounded-full text-sm"
+              >
+                Buy Ticket
+              </button>
+              <div class="flex items-center gap-1 text-gray-300">
+                <i class="ri-star-fill text-pink-500"></i>
+                <span>4.5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nút "Show more" -->
+      <div class="flex justify-center mt-12">
+        <button
+          class="bg-pink-500 hover:bg-pink-600 transition text-white px-6 py-3 rounded-full text-sm font-medium"
+        >
+          Show more
+        </button>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+      class="bg-[#0b0b0b] text-gray-300 py-12 px-6 md:px-16 border-t border-gray-700"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
+        <!-- Cột trái -->
+        <div>
+          <h2 class="text-2xl font-bold text-white mb-4">
+            <span class="text-pink-500">VNUK</span>Cinemas
+          </h2>
+          <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+            Lorem Ipsum has been the industry's standard dummy text ever since
+            the 1500s, when an unknown printer took a galley of type and
+            scrambled it to make a type specimen book.
+          </p>
+          <div class="flex gap-4">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+              alt="Google Play"
+              class="h-10 cursor-pointer"
+            />
+            <img
+              src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+              alt="App Store"
+              class="h-10 cursor-pointer"
+            />
+          </div>
+        </div>
+
+        <!-- Cột giữa -->
+        <div>
+          <h3 class="text-white font-semibold mb-4">Company</h3>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-pink-500 transition">Home</a></li>
+            <li>
+              <a href="#" class="hover:text-pink-500 transition">About us</a>
+            </li>
+            <li>
+              <a href="#" class="hover:text-pink-500 transition">Contact us</a>
+            </li>
+            <li>
+              <a href="#" class="hover:text-pink-500 transition"
+                >Privacy policy</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <!-- Cột phải -->
+        <div>
+          <h3 class="text-white font-semibold mb-4">Get in touch</h3>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li>+1-212-456-7890</li>
+            <li>contact@example.com</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Dòng cuối -->
+      <div
+        class="border-t border-gray-700 pt-6 text-center text-sm text-gray-500"
+      >
+        Copyright 2025 © GreatStack. All Right Reserved.
+      </div>
+    </footer>
+  </body>
+</html>
