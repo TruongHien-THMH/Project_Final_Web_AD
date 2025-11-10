@@ -1,16 +1,18 @@
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import HeroSection from "./components/HeroSection";
-import NowDisplay from "./components/NowDisplay";
+
+import HomePage from './pages/homepage'; 
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
   return (
     <>
+      <Header />
       
-        <Header/>
-        <HeroSection/>
-        <NowDisplay/>
-        <Footer/>
+      <main>
+        <HomePage />
+      </main>
+
+      <Footer />
     </>
   );
 }
