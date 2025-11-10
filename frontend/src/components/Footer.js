@@ -5,7 +5,7 @@ const Footer = () => {
         {/* <!-- Cột trái --> */}
         <div>
           <h2 className="text-2xl font-bold text-white mb-4">
-            <span className="text-pink-500">VNUK</span>Cinemas
+            <span className="text-rose-600">VN</span><span className="text-white">UK</span><span className="text-white">Cinemas</span>
           </h2>
           <p className="text-sm text-gray-400 mb-6 leading-relaxed">
             Lorem Ipsum has been the industry's standard dummy text ever since
@@ -31,24 +31,24 @@ const Footer = () => {
           <h3 className="text-white font-semibold mb-4">Company</h3>
           <ul className="space-y-2 text-sm text-gray-400">
             <li>
-              <a  className="hover:text-pink-500 transition">
+              <button className="hover:text-rose-600 transition bg-transparent border-none cursor-pointer text-left">
                 Home
-              </a>
+              </button>
             </li>
             <li>
-              <a  className="hover:text-pink-500 transition">
+              <button className="hover:text-rose-600 transition bg-transparent border-none cursor-pointer text-left">
                 About us
-              </a>
+              </button>
             </li>
             <li>
-              <a  className="hover:text-pink-500 transition">
+              <button className="hover:text-rose-600 transition bg-transparent border-none cursor-pointer text-left">
                 Contact us
-              </a>
+              </button>
             </li>
             <li>
-              <a  className="hover:text-pink-500 transition">
+              <button className="hover:text-rose-600 transition bg-transparent border-none cursor-pointer text-left">
                 Privacy policy
-              </a>
+              </button>
             </li>
           </ul>
         </div>
