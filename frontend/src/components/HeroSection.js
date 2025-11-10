@@ -12,9 +12,7 @@ const HeroSection = () => {
 
       <div className="relative z-10 max-w-2xl">
         {/* Thêm logo Marvel Studios */}
-        <div className="inline-block bg-red-600 text-white px-3 py-1 text-sm font-bold tracking-widest mb-4">
-          MARVEL STUDIOS
-        </div>
+        
 
         <h1 className="text-5xl md:text-6xl font-bold mb-4 leading-tight">
           Guardians of the Galaxy
@@ -38,7 +36,7 @@ const HeroSection = () => {
           conspiracy.
         </p>
 
-        <button className="bg-pink-500 hover:bg-pink-600 transition px-6 py-3 rounded font-medium flex items-center gap-2">
+        <button className="bg-rose-600 hover:bg-rose-700 transition px-6 py-3 rounded font-medium flex items-center gap-2">         
           Explore Movies
           <FaArrowRight />
         </button>

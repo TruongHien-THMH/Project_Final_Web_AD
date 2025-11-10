@@ -1,35 +1,32 @@
 const NowDisplay = () => {
   return (
-    <section class="bg-[#0b0b0b] text-white py-16 px-6 md:px-16">
+    <section className="bg-[#0b0b0b] text-white py-16 px-6 md:px-16">
       {/* <!-- Tiêu đề --> */}
-      <div class="flex justify-between items-center mb-8">
-        <h2 class="text-2xl font-semibold">Now Showing</h2>
-        <a
-          href="#"
-          class="text-gray-300 text-sm hover:text-pink-400 transition flex items-center gap-1"
-        >
-          View All <i class="ri-arrow-right-line"></i>
-        </a>
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-2xl font-semibold">Now Showing</h2>
+        <button className="text-gray-300 text-sm hover:text-rose-600 transition flex items-center gap-1 bg-transparent border-none cursor-pointer">
+          View All <i className="ri-arrow-right-line"></i>
+        </button>
       </div>
 
       {/* <!-- Grid phim --> */}
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {/* <!-- Card 1 --> */}
-        <div class="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition">
-          <div class="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold">
+        <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition">
+          <div className="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold">
             A
           </div>
-          <div class="p-4">
-            <h3 class="font-semibold mb-2">Tiêu đề phim 1</h3>
-            <p class="text-sm text-gray-400 mb-4">
+          <div className="p-4">
+            <h3 className="font-semibold mb-2">Tiêu đề phim 1</h3>
+            <p className="text-sm text-gray-400 mb-4">
               2018 - Action, Adventure - 2h 8m
             </p>
-            <div class="flex justify-between items-center">
-              <button class="bg-pink-500 hover:bg-pink-600 transition text-white px-4 py-2 rounded-full text-sm">
+            <div className="flex justify-between items-center">
+              <button className="bg-rose-600 hover:bg-rose-700 transition text-white px-4 py-2 rounded-full text-sm">
                 Buy Ticket
               </button>
-              <div class="flex items-center gap-1 text-gray-300">
-                <i class="ri-star-fill text-pink-500"></i>
+              <div className="flex items-center gap-1 text-gray-300">
+                <i className="ri-star-fill text-rose-600"></i>
                 <span>4.5</span>
               </div>
             </div>
@@ -37,21 +34,21 @@ const NowDisplay = () => {
         </div>
 
         {/* <!-- Card 2 --> */}
-        <div class="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition">
-          <div class="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold">
+        <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition">
+          <div className="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold">
             B
           </div>
-          <div class="p-4">
-            <h3 class="font-semibold mb-2">Tiêu đề phim 2</h3>
-            <p class="text-sm text-gray-400 mb-4">
+          <div className="p-4">
+            <h3 className="font-semibold mb-2">Tiêu đề phim 2</h3>
+            <p className="text-sm text-gray-400 mb-4">
               2018 - Action, Adventure - 2h 8m
             </p>
-            <div class="flex justify-between items-center">
-              <button class="bg-pink-500 hover:bg-pink-600 transition text-white px-4 py-2 rounded-full text-sm">
+            <div className="flex justify-between items-center">
+              <button className="bg-rose-600 hover:bg-rose-700 transition text-white px-4 py-2 rounded-full text-sm">
                 Buy Ticket
               </button>
-              <div class="flex items-center gap-1 text-gray-300">
-                <i class="ri-star-fill text-pink-500"></i>
+              <div className="flex items-center gap-1 text-gray-300">
+                <i className="ri-star-fill text-rose-600"></i>
                 <span>4.5</span>
               </div>
             </div>
@@ -59,21 +56,21 @@ const NowDisplay = () => {
         </div>
 
         {/* <!-- Card 3 --> */}
-        <div class="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition">
-          <div class="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold">
+        <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition">
+          <div className="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold">
             C
           </div>
-          <div class="p-4">
-            <h3 class="font-semibold mb-2">Tiêu đề phim 3</h3>
-            <p class="text-sm text-gray-400 mb-4">
+          <div className="p-4">
+            <h3 className="font-semibold mb-2">Tiêu đề phim 3</h3>
+            <p className="text-sm text-gray-400 mb-4">
               2018 - Action, Adventure - 2h 8m
             </p>
-            <div class="flex justify-between items-center">
-              <button class="bg-pink-500 hover:bg-pink-600 transition text-white px-4 py-2 rounded-full text-sm">
+            <div className="flex justify-between items-center">
+              <button className="bg-rose-600 hover:bg-rose-700 transition text-white px-4 py-2 rounded-full text-sm">
                 Buy Ticket
               </button>
-              <div class="flex items-center gap-1 text-gray-300">
-                <i class="ri-star-fill text-pink-500"></i>
+              <div className="flex items-center gap-1 text-gray-300">
+                <i className="ri-star-fill text-rose-600"></i>
                 <span>4.5</span>
               </div>
             </div>
@@ -81,21 +78,21 @@ const NowDisplay = () => {
         </div>
 
         {/* <!-- Card 4 --> */}
-        <div class="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition">
-          <div class="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold">
+        <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition">
+          <div className="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold">
             D
           </div>
-          <div class="p-4">
-            <h3 class="font-semibold mb-2">Tiêu đề phim 4</h3>
-            <p class="text-sm text-gray-400 mb-4">
+          <div className="p-4">
+            <h3 className="font-semibold mb-2">Tiêu đề phim 4</h3>
+            <p className="text-sm text-gray-400 mb-4">
               2018 - Action, Adventure - 2h 8m
             </p>
-            <div class="flex justify-between items-center">
-              <button class="bg-pink-500 hover:bg-pink-600 transition text-white px-4 py-2 rounded-full text-sm">
+            <div className="flex justify-between items-center">
+              <button className="bg-rose-600 hover:bg-rose-700 transition text-white px-4 py-2 rounded-full text-sm">
                 Buy Ticket
               </button>
-              <div class="flex items-center gap-1 text-gray-300">
-                <i class="ri-star-fill text-pink-500"></i>
+              <div className="flex items-center gap-1 text-gray-300">
+                <i className="ri-star-fill text-rose-600"></i>
                 <span>4.5</span>
               </div>
             </div>
@@ -104,8 +101,8 @@ const NowDisplay = () => {
       </div>
 
       {/* <!-- Nút "Show more" --> */}
-      <div class="flex justify-center mt-12">
-        <button class="bg-pink-500 hover:bg-pink-600 transition text-white px-6 py-3 rounded-full text-sm font-medium">
+      <div className="flex justify-center mt-12">
+        <button className="bg-rose-600 hover:bg-rose-700 transition text-white px-6 py-3 rounded-full text-sm font-medium">
           Show more
         </button>
       </div>

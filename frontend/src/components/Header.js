@@ -3,8 +3,8 @@ const Header = () => {
     <header className="absolute top-0 left-0 w-full z-50 flex justify-between items-center px-8 py-4 bg-transparent">
       {/* <!-- Logo --> */}
       <div className="text-2xl font-bold">
-        <span className="text-pink-500">VNUK</span>Final
-      </div>
+          <span className="text-rose-600">VN</span><span className="text-white">UK</span>Final
+          </div>
 
       {/* <!-- Navigation --> */}
       <nav className="hidden md:flex bg-black/40 backdrop-blur-none px-8 py-2 rounded-full space-x-6 text-white text-sm">
@@ -19,7 +19,7 @@ const Header = () => {
         <button className="text-white text-lg">
           <i className="ri-search-line"></i>
         </button>
-        <button className="bg-pink-500 hover:bg-pink-600 transition text-white px-5 py-2 rounded-full">
+        <button className="bg-rose-600 hover:bg-rose-700 transition text-white px-5 py-2 rounded-full">
           Log In
         </button>
       </div>
