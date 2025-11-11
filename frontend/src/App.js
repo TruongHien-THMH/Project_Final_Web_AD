@@ -1,6 +1,7 @@
 // src/App.js
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import NotFoundPage from './User/components/NotFoundPage';
 
 // USER Components (Đã có sẵn)
 import HomePage from './User/pages/HomePage';
@@ -31,11 +32,10 @@ function App() {
 
         <Route path="/" element={<UserLayout />}>
           <Route index element={<HomePage />} />
-          
+                  <Route path="*" element={<NotFoundPage />} />
+
         </Route>
-        {/* -------------------- */}
-        
-        <Route path="*" element={<h1>404 - Page Not Found</h1>} />
+
       </Routes>
     </BrowserRouter>
   );

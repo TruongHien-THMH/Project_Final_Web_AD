@@ -1,8 +1,10 @@
 import BlurCircle from "./BlurCircle";
+import { useNavigate } from 'react-router-dom'; // 1. Import hook
 
 const NowDisplay = () => {
+  const navigate = useNavigate(); // 2. Khởi tạo hàm navigate
+
   return (
-    // 👇 SỬA Ở ĐÂY: Đã xóa "overflow-hidden"
     <section className="bg-[#0b0b0b] text-white py-16 px-6 md:px-16 relative">
       {/* Background Blur Circles */}
       <BlurCircle top="-100px" right="-100px" />
@@ -17,7 +19,7 @@ const NowDisplay = () => {
         </button>
       </div>
 
-      {/* Grid phim */}
+      {/* Grid phim (giữ nguyên) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 relative z-10">
         {/* Card 1 */}
         <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition duration-300">
@@ -110,10 +112,17 @@ const NowDisplay = () => {
 
       {/* Nút "Show more" */}
       <div className="flex justify-center mt-12 relative z-10">
-        <button className="bg-rose-600 hover:bg-rose-700 transition text-white px-6 py-3 rounded-full text-sm font-medium">
+        <button
+          onClick={() => {
+            navigate('/movies'); // Giờ hàm này đã được định nghĩa
+            window.scrollTo(0, 0);
+          }}
+          className="bg-rose-600 hover:bg-rose-700 transition text-white px-6 py-3 rounded-full text-sm font-medium"
+        >
           Show more
         </button>
       </div>
+
     </section>
   );
 };
