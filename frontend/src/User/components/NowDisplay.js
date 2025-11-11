@@ -1,18 +1,26 @@
+import BlurCircle from "./BlurCircle";
+
 const NowDisplay = () => {
   return (
-    <section className="bg-[#0b0b0b] text-white py-16 px-6 md:px-16">
-      {/* <!-- Tiêu đề --> */}
-      <div className="flex justify-between items-center mb-8">
+    // 👇 SỬA Ở ĐÂY: Đã xóa "overflow-hidden"
+    <section className="bg-[#0b0b0b] text-white py-16 px-6 md:px-16 relative">
+      {/* Background Blur Circles */}
+      <BlurCircle top="-100px" right="-100px" />
+      <BlurCircle top="50%" left="-100px" />
+      <BlurCircle bottom="-100px" right="30%" />
+
+      {/* Tiêu đề */}
+      <div className="flex justify-between items-center mb-8 relative z-10">
         <h2 className="text-2xl font-semibold">Now Showing</h2>
         <button className="text-gray-300 text-sm hover:text-rose-600 transition flex items-center gap-1 bg-transparent border-none cursor-pointer">
           View All <i className="ri-arrow-right-line"></i>
         </button>
       </div>
 
-      {/* <!-- Grid phim --> */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {/* <!-- Card 1 --> */}
-        <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition">
+      {/* Grid phim */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 relative z-10">
+        {/* Card 1 */}
+        <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition duration-300">
           <div className="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold">
             A
           </div>
@@ -33,8 +41,8 @@ const NowDisplay = () => {
           </div>
         </div>
 
-        {/* <!-- Card 2 --> */}
-        <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition">
+        {/* Card 2 */}
+        <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition duration-300">
           <div className="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold">
             B
           </div>
@@ -55,8 +63,8 @@ const NowDisplay = () => {
           </div>
         </div>
 
-        {/* <!-- Card 3 --> */}
-        <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition">
+        {/* Card 3 */}
+        <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition duration-300">
           <div className="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold">
             C
           </div>
@@ -77,8 +85,8 @@ const NowDisplay = () => {
           </div>
         </div>
 
-        {/* <!-- Card 4 --> */}
-        <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition">
+        {/* Card 4 */}
+        <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition duration-300">
           <div className="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold">
             D
           </div>
@@ -100,8 +108,8 @@ const NowDisplay = () => {
         </div>
       </div>
 
-      {/* <!-- Nút "Show more" --> */}
-      <div className="flex justify-center mt-12">
+      {/* Nút "Show more" */}
+      <div className="flex justify-center mt-12 relative z-10">
         <button className="bg-rose-600 hover:bg-rose-700 transition text-white px-6 py-3 rounded-full text-sm font-medium">
           Show more
         </button>

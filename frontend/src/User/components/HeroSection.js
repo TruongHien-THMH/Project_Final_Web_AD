@@ -36,7 +36,7 @@ const HeroSection = () => {
           conspiracy.
         </p>
 
-        <button className="bg-rose-600 hover:bg-rose-700 transition px-6 py-3 rounded font-medium flex items-center gap-2">         
+       <button className="bg-rose-600 hover:bg-rose-700 transition px-6 py-3 rounded-full font-medium flex items-center gap-2">         
           Explore Movies
           <FaArrowRight />
         </button>
