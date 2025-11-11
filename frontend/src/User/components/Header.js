@@ -3,7 +3,7 @@ const Header = () => {
     <header className="absolute top-0 left-0 w-full z-50 flex justify-between items-center px-8 py-4 bg-transparent">
       {/* <!-- Logo --> */}
       <div className="text-2xl font-bold">
-          <span className="text-rose-600">VN</span><span className="text-white">UK</span>Final
+          <span className="text-rose-600">VN</span><span className="text-white">UKCinemas</span>
           </div>
 
       {/* <!-- Navigation --> */}

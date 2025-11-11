@@ -1,16 +1,13 @@
-// src/App.js
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import NotFoundPage from './User/components/NotFoundPage';
 
-// USER Components (Đã có sẵn)
+// USER Components
 import HomePage from './User/pages/HomePage';
-// *** Đã xóa import Header và Footer vì chúng đã được chuyển vào UserLayout.js ***
-// import Footer from './User/components/Footer';
-// import Header from './User/components/Header';
-
-// 1. IMPORT UserLayout mới
 import UserLayout from './User/pages/UserLayout'; 
+
+// 1. IMPORT TRANG ĐẶT GHẾ MỚI CỦA BẠN
+// (Giả sử bạn lưu file SeatBookingPage.js trong 'src/User/pages/')
+import SeatBookingPage from './User/pages/SeatBookingPage';
 
 // ADMIN Components
 import AdminLayout from './Admin/pages/AdminLayout';
@@ -23,6 +20,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* === ADMIN ROUTES === */}
         <Route path="/Admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboardPage />} /> 
           <Route path="add-shows" element={<AddShowsPage />} />
@@ -30,10 +28,14 @@ function App() {
           <Route path="list-bookings" element={<ListBookingsPage />} />
         </Route>
 
+        {/* === USER ROUTES (SỬ DỤNG USERLAYOUT) === */}
         <Route path="/" element={<UserLayout />}>
+          {/* Trang chủ */}
           <Route index element={<HomePage />} />
-                  <Route path="*" element={<NotFoundPage />} />
+          
+          <Route path="booking" element={<SeatBookingPage />} />
 
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
 
       </Routes>
