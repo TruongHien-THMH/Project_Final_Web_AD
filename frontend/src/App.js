@@ -16,7 +16,11 @@ import AddShowsPage from './Admin/pages/AddShowsPage';
 import ListShowsPage from './Admin/pages/ListShowsPage';
 import ListBookingsPage from './Admin/pages/ListBookingsPage';
 
+
 function App() {
+
+
+
   return (
     <BrowserRouter>
       <Routes>

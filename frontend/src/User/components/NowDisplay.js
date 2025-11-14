@@ -124,6 +124,8 @@ const NowDisplay = () => {
       </div>
 
     </section>
+
+    
   );
 };
 
