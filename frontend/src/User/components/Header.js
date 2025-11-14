@@ -3,15 +3,15 @@ const Header = () => {
     <header className="absolute top-0 left-0 w-full z-50 flex justify-between items-center px-8 py-4 bg-transparent">
       {/* <!-- Logo --> */}
       <div className="text-2xl font-bold">
-          <span className="text-rose-600">VN</span><span className="text-white">UK</span>Final
+          <span className="text-rose-600">VN</span><span className="text-white">UKCinemas</span>
           </div>
 
       {/* <!-- Navigation --> */}
       <nav className="hidden md:flex bg-black/40 backdrop-blur-none px-8 py-2 rounded-full space-x-6 text-white text-sm">
-        <span className="hover:text-pink-400 transition">Home</span>
-        <span className="hover:text-pink-400 transition">Movies</span>
-        <span className="hover:text-pink-400 transition">Theatres</span>
-        <span className="hover:text-pink-400 transition">Releases</span>
+        <span className="hover:text-rose-700 transition">Home</span>
+        <span className="hover:text-rose-700 transition">Movies</span>
+        <span className="hover:text-rose-700 transition">Theatres</span>
+        <span className="hover:text-rose-700 transition">Releases</span>
       </nav>
 
       {/* <!-- Search + Login --> */}
