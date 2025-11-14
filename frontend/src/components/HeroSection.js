@@ -1,4 +1,3 @@
-import React from 'react';
 // Import các icon cần thiết từ thư viện react-icons
 import { FaCalendarAlt, FaClock, FaArrowRight } from 'react-icons/fa';
 

@@ -1,4 +1,38 @@
+import { useState, useEffect } from "react";
+import MovieCard from "./MovideCard";
+
 const NowDisplay = () => {
+  const [movies, setMovive] = useState([]);
+
+  useEffect( () => {
+    const accessAPIMovie = async () => {
+      try {
+          const url = process.env.REACT_APP_API_BASE_URL;
+          const options = {
+            method: 'GET',
+            headers: {
+              accept: 'application/json',
+              Authorization: `Bearer ${process.env.REACT_APP_API_ACCESS_TOKEN}`
+            }
+          };
+
+          const res = await fetch(url, options);
+          const data = await res.json();
+          console.log(data);
+          console.log(process.env.REACT_APP_IMAGES);
+          // console.log(data.results);
+          setMovive(data.results);
+      } catch (error) {
+          console.error("Error fetching data:", error.response?.data || error.message);
+          return null;
+      } finally {
+          console.log("Fetch is done")
+      }
+  };
+
+    accessAPIMovie();
+    }, [] );
+
   return (
     <section className="bg-[#0b0b0b] text-white py-16 px-6 md:px-16">
       {/* <!-- Tiêu đề --> */}
@@ -107,6 +141,8 @@ const NowDisplay = () => {
         </button>
       </div>
     </section>
+
+    
   );
 };
 
