@@ -14,11 +14,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
+
+const movieRouter = require('./routes/movieRoutes');
 // app.get("/api/cinema", (req, res) => {
 //     res.send("Backend cinema is running...");
 // });
-const movieRouter = require('./routes/movieRoutes');
 app.use('/api/cinema', movieRouter);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// const PORT = process.env.PORT || 5000;
+const PORT = 5001;
+
+app.listen(PORT, () => console.log(`Server running on port ${5001}`));
