@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const movieSchema = new mongoose.Schema({
   id: Number,
@@ -8,6 +8,6 @@ const movieSchema = new mongoose.Schema({
   poster_path: String,
   release_date: String,
   genre_ids: [Number],
-});
+}, { collection: "movies" });
 
-export default mongoose.model("Movie", movieSchema);
+module.exports = mongoose.model("Movie", movieSchema);

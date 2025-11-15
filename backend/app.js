@@ -18,10 +18,8 @@ app.use(express.urlencoded({ extended: true }));
 // app.get("/api/cinema", (req, res) => {
 //     res.send("Backend cinema is running...");
 // });
-
-app.get('/api/cinenma', movieRouter);
-app.use("/shows", showRoutes);
-
+const movieRouter = require('./routes/movieRoutes');
+app.use('/api/cinema', movieRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
