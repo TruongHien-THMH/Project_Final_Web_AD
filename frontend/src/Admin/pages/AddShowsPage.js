@@ -1,10 +1,11 @@
 // src/admin/pages/AddShowsPage.js
 import React, { useState } from 'react';
 import MovieSelectionCard from '../components/MovieSelectionCard';
+import axios from "axios";
 
 const AddShowsPage = () => {
   const [showPrice, setShowPrice] = useState('');
-  const [selectedDateTime, setSelectedDateTime] = useState('2025-06-20 15:23'); 
+  const [selectedDateTime, setSelectedDateTime] = useState('2025-06-20 15:23');
   const [selectedMovie, setSelectedMovie] = useState(1); // ID của phim được chọn
 
   const movies = [
@@ -14,10 +15,27 @@ const AddShowsPage = () => {
     { id: 4, title: 'Mission Impossible', rating: 4.5, votes: '40.6K Votes', genres: 'Action, Adventure, Thriller' },
   ];
 
+  const handleAddShow = async () => {
+    try {
+      const response = await axios.post("http://localhost:3001/shows/add", {
+        movieId: selectedMovie,
+        price: showPrice,
+        datetime: selectedDateTime,
+      });
+
+      alert("Show added successfully!");
+      console.log(response.data);
+
+    } catch (error) {
+      console.error(error);
+      alert("Failed to add show");
+    }
+  };
+
   return (
     <div className="text-white">
       <h1 className="text-3xl font-bold mb-6 text-rose-500">Add Shows</h1>
-      
+
       {/* 1. Chọn Phim */}
       <h2 className="text-2xl font-semibold mb-4 text-gray-300">Now Playing Movies</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
@@ -31,7 +49,7 @@ const AddShowsPage = () => {
         ))}
       </div>
 
-      {/* 2. Chi tiết Suất chiếu */}
+      {/* 2. Chi tiết suất chiếu */}
       <div className="bg-gray-800 p-6 rounded-xl shadow-2xl max-w-lg">
         <label className="block mb-4">
           <span className="text-gray-300 font-medium">Show Price</span>
@@ -50,10 +68,10 @@ const AddShowsPage = () => {
         <label className="block mb-4">
           <span className="text-gray-300 font-medium">Select Date and Time</span>
           <div className="flex space-x-3 mt-1">
-            <input 
-                type="text" 
-                placeholder="dd-mm-yyyy--:--" 
-                className="block w-full bg-gray-700 border-transparent rounded-lg py-2 px-3 text-white placeholder-gray-400 focus:border-rose-500 focus:ring-rose-500"
+            <input
+              type="text"
+              placeholder="dd-mm-yyyy --:--"
+              className="block w-full bg-gray-700 border-transparent rounded-lg py-2 px-3 text-white placeholder-gray-400 focus:border-rose-500 focus:ring-rose-500"
             />
             <button className="bg-rose-600 hover:bg-rose-700 transition text-white px-4 py-2 rounded-lg font-medium whitespace-nowrap">
               Add Time
@@ -65,16 +83,19 @@ const AddShowsPage = () => {
         <div className="flex items-center space-x-2 mb-6">
           <span className="inline-flex items-center px-3 py-1 text-sm font-medium bg-rose-500 text-white rounded-full">
             {selectedDateTime}
-            <button 
-                onClick={() => setSelectedDateTime('')} 
-                className="ml-2 text-white hover:text-gray-200 transition"
+            <button
+              onClick={() => setSelectedDateTime('')}
+              className="ml-2 text-white hover:text-gray-200 transition"
             >
-                &times;
+              &times;
             </button>
           </span>
         </div>
 
-        <button className="w-full bg-rose-600 hover:bg-rose-700 transition text-white text-lg font-semibold py-2 rounded-lg shadow-lg shadow-rose-900/50">
+        <button
+          onClick={handleAddShow}
+          className="w-full bg-rose-600 hover:bg-rose-700 transition text-white text-lg font-semibold py-2 rounded-lg shadow-lg shadow-rose-900/50"
+        >
           Add Show
         </button>
       </div>
