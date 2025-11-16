@@ -17,6 +17,8 @@ import ListShowsPage from './Admin/pages/ListShowsPage';
 import ListBookingsPage from './Admin/pages/ListBookingsPage';
 
 
+import MoviePage from './User/pages/MoviePage';
+
 function App() {
 
 
@@ -33,13 +35,31 @@ function App() {
         </Route>
 
         {/* === USER ROUTES (SỬ DỤNG USERLAYOUT) === */}
-        <Route path="/" element={<UserLayout />}>
+          <Route 
+          path="/" 
+          element={<UserLayout />}
+          >
           {/* Trang chủ */}
-          <Route index element={<HomePage />} />
-          
-          <Route path="booking" element={<SeatBookingPage />} />
+          <Route 
+            index 
+            element={<HomePage />} 
+          />
 
-          <Route path="*" element={<NotFoundPage />} />
+          <Route 
+             path="movie"
+             element={<MoviePage />}
+          />
+          
+          <Route 
+            path="booking" 
+            element={<SeatBookingPage />} 
+          />
+
+          <Route 
+            path="*" 
+            element={<NotFoundPage />} 
+          />
+
         </Route>
 
       </Routes>

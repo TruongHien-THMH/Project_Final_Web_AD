@@ -1,13 +1,14 @@
 const mongoose = require("mongoose");
 
 const movieSchema = new mongoose.Schema({
-  id: Number,
-  title: String,
-  original_title: String,
-  overview: String,
-  poster_path: String,
-  release_date: String,
-  genre_ids: [Number],
-}, { collection: "movies" });
+  id: { type: Number, required: true },
+  title: {type: String} ,
+  original_title: { type: String },
+  overview: { type: String },
+  poster_path: { type: String },
+  release_date: { type: String },
+  genre_ids: { type: [Number] }
+});
 
-module.exports = mongoose.model("Movie", movieSchema);
+const Movie = mongoose.model("Movie", movieSchema);
+module.exports = Movie;
