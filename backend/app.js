@@ -5,7 +5,6 @@ const connectDB = require("./config/db");
 const showRoutes = require("./routes/showRoutes");
 
 dotenv.config();
-connectDB();
 
 const app = express();
 
@@ -13,15 +12,17 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-
 const movieRouter = require('./routes/movieRoutes');
-// app.get("/api/cinema", (req, res) => {
-//     res.send("Backend cinema is running...");
-// });
+
 app.use('/api/cinema', movieRouter);
 
-// const PORT = process.env.PORT || 5000;
-const PORT = 5001;
+const PORT = 5001 || process.env.PORT;
 
-app.listen(PORT, () => console.log(`Server running on port ${5001}`));
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+        // corn;
+        // require("./cron/fetchMovie");
+    });
+});
+

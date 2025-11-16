@@ -7,11 +7,11 @@ import Footer from '../components/Footer';
 function UserLayout() {
   return (
     <>
-      <Header />
+      <Header/>
       <main>
-        <Outlet />
+        <Outlet/>
       </main>
-      <Footer />
+      <Footer/>
     </>
   );
 }

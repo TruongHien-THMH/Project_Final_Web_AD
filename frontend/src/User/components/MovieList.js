@@ -3,9 +3,9 @@
 // viết hàm trả về 1 list phim
 import { useState, useEffect } from "react";
 import API from "../../api";
-import BEMovieCard from "./BEMovieCard";
+import MovieCard from "./MovieCard";
 
-export default function BEDisplay() {
+export default function MovieList() {
     const [movies, setMovies] = useState([]);
 
     useEffect(() => {
@@ -57,7 +57,7 @@ export default function BEDisplay() {
             </div>
           </div>
 
-          <BEMovieCard data={movies} />
+          <MovieCard data={movies} />
 
         </div>
 
