@@ -1,8 +1,17 @@
 const MovieCard = ({ data }) => {
+
+  // const handleClick = (id) => {
+  //   alert('id: ', id)
+  // }
+
   return (
     <>
       {data.length > 0 && data.map(item => (
-        <div key={item.id} className="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition">
+        <div 
+          key={item.id} 
+          className="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition"
+          // onClick={handleClick(item.id)}
+        >
           <div className="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold">
             <img 
               src={`${process.env.REACT_APP_IMAGES}${item.poster_path}`}
