@@ -87,11 +87,11 @@ exports.getNowPlayingMovie = async (req, res) => {
       }
     ])
 
-    const nowPlayingMoive = result[0].nowPlaying;
+    const nowPlayingMovie = result[0].nowPlaying;
     const popular = result[0].popular;
     const vote = result[0].vote;
     
-    res.status(200).json({nowPlayingMoive, popular, vote});
+    res.status(200).json({nowPlayingMovie, popular, vote});
   } catch (err) {
     console.log("Lỗi khi gọi getNowPlayingMovie", err);
     res
@@ -102,8 +102,17 @@ exports.getNowPlayingMovie = async (req, res) => {
 
 exports.getMovieDetail = async (req, res) => {
   try {
-    const movie = await Movie.findById(req.params.id);
+    // Để ý trong Mongoose có _id thì là ObjectID: >>>>
+
+    const {id} = req.params
+    const movie = await Movie.findOne({ id: id }); // Đây là id của TMDB_ID # với id của Mongoose là 1 dạng OBJ_ID
+    if(!movie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
     // console.log("Đã lấy được ID: ", movie);
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
     res.status(200).json(movie);
   } catch (error) {
     console.log("Lỗi khi gọi getMovieDetail: ", error);
@@ -125,5 +134,14 @@ exports.createMovie = async (req, res) => {
     res.status(500).json({ message: "Lỗi khi cố tạo doc mới" });
   }
 };
+
+exports.demoFunc = async (req, res) => {
+  try {
+    const count = 0
+    console.log(count++);
+  } catch (error) {
+    console.log("Lỗi từ hàm demoFunc: ", error);
+  }
+}
 
 // exports.fetchDataPerHour = async (req, res) => {}

@@ -5,7 +5,9 @@ const MovieController = require('../controllers/MovieControllers');
 
 router.get('/', MovieController.getNowPlayingMovie);
 router.post('/', MovieController.createMovie);
-// router.get('/:id', MovieController.getMovieDetail);
+router.get('/movie/:id', MovieController.getMovieDetail);
+
+router.get()
 
 router.get('/fetchData', MovieController.fetchAllNowPlayingMovie);
 
