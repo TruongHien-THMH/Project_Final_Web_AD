@@ -35,7 +35,7 @@ function App() {
         </Route>
 
         {/* === USER ROUTES (SỬ DỤNG USERLAYOUT) === */}
-          <Route 
+        <Route 
           path="/" 
           element={<UserLayout />}
           >
@@ -46,7 +46,7 @@ function App() {
           />
 
           <Route 
-             path="movie"
+             path="/movie/:id"
              element={<MoviePage />}
           />
           
