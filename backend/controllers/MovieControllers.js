@@ -135,13 +135,4 @@ exports.createMovie = async (req, res) => {
   }
 };
 
-exports.demoFunc = async (req, res) => {
-  try {
-    const count = 0
-    console.log(count++);
-  } catch (error) {
-    console.log("Lỗi từ hàm demoFunc: ", error);
-  }
-}
-
 // exports.fetchDataPerHour = async (req, res) => {}

@@ -1,4 +1,4 @@
-import { Image } from 'react';
+
 
 
 const MovieDetail =  ({data}) => {
@@ -16,9 +16,15 @@ const MovieDetail =  ({data}) => {
 
         {/* LEFT POSTER */}
         <div className="w-full md:w-1/3">
-          <div className="w-full h-[420px] rounded-xl bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center text-4xl font-bold text-white">
-            <image 
-              src={`${process.env.REACT_APP_IMAGES || process.env.REACT_APP_BASE_IMG}`}
+          <div className="w-full aspect-[2/3] rounded-xl overflow-hidden bg-gradient-to-br from-gray-700 to-gray-900">
+            <img
+              src={
+                data?.poster_path
+                  ? `${process.env.REACT_APP_IMAGES}${data.poster_path}`
+                  : process.env.REACT_APP_BASE_IMG
+              }
+              alt="Movie Poster"
+              className="w-full h-full object-cover"
             />
           </div>
         </div>
