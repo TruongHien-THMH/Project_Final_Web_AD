@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-const showRoutes = require("./routes/showRoutes");
 
 dotenv.config();
 
@@ -12,9 +11,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const movieRouter = require('./routes/movieRoutes');
+const movieRoutes = require("./routes/movieRoutes");
+const showRoutes = require("./routes/showRoutes");
 
-app.use('/api/cinema', movieRouter);
+app.use("/api/cinema", movieRoutes);
+app.use("/shows", showRoutes);
 
 const PORT = 5001 || process.env.PORT;
 

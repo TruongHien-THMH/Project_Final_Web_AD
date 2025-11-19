@@ -1,7 +1,9 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const ShowController = require("../controllers/ShowController");
+const ShowController = require("../controllers/Admin/ShowController");
 
-router.post("/add", ShowController.addShow);
+router.post('/', ShowController.addShow);
+router.get('/', ShowController.getAllShows); 
+router.delete('/:id', ShowController.deleteShow); 
 
 module.exports = router;

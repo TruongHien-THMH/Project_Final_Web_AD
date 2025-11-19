@@ -1,5 +1,5 @@
 // const Movie = require("../models/Movie");
-const Movie = require("../models/Movie");
+const Movie = require("../../models/Movie");
 
 exports.fetchAllNowPlayingMovie = async (req, res) => {
   try {

@@ -2,6 +2,9 @@
 import React from 'react';
 
 const MovieSelectionCard = ({ movie, isSelected, onToggle }) => {
+
+  console.log(movie);
+
   return (
     <div 
       className={`relative w-full rounded-lg overflow-hidden shadow-xl cursor-pointer transition duration-300 
@@ -10,7 +13,7 @@ const MovieSelectionCard = ({ movie, isSelected, onToggle }) => {
     >
       {/* Poster và Overlay */}
       <div className="h-80 bg-cover bg-center" 
-           style={{ backgroundImage: `url(${movie.image || 'https://via.placeholder.com/300x450/1f2937/ffffff?text=Mission+Impossible'})` }}
+           style={{ backgroundImage: `url(${process.env.REACT_APP_IMAGES/movie.poster_path || 'https://via.placeholder.com/300x450/1f2937/ffffff?text=Mission+Impossible'})` }}
       >
         {/* Lớp phủ tối hơn */}
         <div className="absolute inset-0 bg-black bg-opacity-30 flex flex-col justify-end p-4">
