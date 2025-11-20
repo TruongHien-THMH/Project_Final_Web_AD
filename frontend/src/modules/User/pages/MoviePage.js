@@ -1,8 +1,9 @@
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import MovieDetail from "../components/MovieDetail";
-import  ShowTimeList from "../components/ShowTimeList";
+import ShowTimeList from "../components/ShowTimeList";
 import NowDisplay from "../components/NowDisplay";
 import API from "../../../api.js";
-
 
 const MoviePage = () => {
 
@@ -27,14 +28,26 @@ const MoviePage = () => {
         console.log(id);
         getDetail()
       }, [id])
+=========
+>>>>>>>>> Temporary merge branch 2:frontend/src/User/pages/MoviePage.js
 
+const MovieDetailPage = () => {
     return (
-        <div className="bg-black min-h-screen">
-            <MovieDetail />
-            <ShowTimeList />
-            <NowDisplay />
-        </div>
-    )
+      <div className="bg-black min-h-screen text-white flex justify-center items-center">
+        <div>Movie not found</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-black min-h-screen text-white">
+      {/* ✅ TRUYỀN prop detail vào các component */}
+      <MovieDetail movie={detail} />
+      <ShowTimeList movieId={id} />
+      <NowDisplay />
+    </div>
+  );
 }
 
-export default MovieDetailPage;
+// ✅ SỬA: Export đúng tên component
+export default MoviePage;

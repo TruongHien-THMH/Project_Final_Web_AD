@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MovieSelectionCard from '../components/MovieSelectionCard';
 import axios from 'axios';
-import API from '../../api';
+import API from '../../../api';
 
 const AddShowsPage = () => {
   const [showPrice, setShowPrice] = useState('');
