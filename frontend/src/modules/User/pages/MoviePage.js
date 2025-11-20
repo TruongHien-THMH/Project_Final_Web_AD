@@ -28,20 +28,10 @@ const MoviePage = () => {
         console.log(id);
         getDetail()
       }, [id])
-=========
->>>>>>>>> Temporary merge branch 2:frontend/src/User/pages/MoviePage.js
-
-const MovieDetailPage = () => {
-    return (
-      <div className="bg-black min-h-screen text-white flex justify-center items-center">
-        <div>Movie not found</div>
-      </div>
-    );
-  }
 
   return (
     <div className="bg-black min-h-screen text-white">
-      {/* ✅ TRUYỀN prop detail vào các component */}
+      
       <MovieDetail movie={detail} />
       <ShowTimeList movieId={id} />
       <NowDisplay />
@@ -49,5 +39,4 @@ const MovieDetailPage = () => {
   );
 }
 
-// ✅ SỬA: Export đúng tên component
 export default MoviePage;

@@ -1,8 +1,8 @@
 import React from 'react';
 
-const MovieDetail = ({ movie }) => {  // ✅ SỬA: nhận prop `movie` thay vì `id`
+const MovieDetail = ({ movie }) => {  
   
-  // ✅ Nếu không có movie, hiển thị loading
+
   if (!movie) {
     return (
       <div className="w-full bg-[#0d0d0d] text-white py-16 px-6 md:px-20">
@@ -13,14 +13,14 @@ const MovieDetail = ({ movie }) => {  // ✅ SỬA: nhận prop `movie` thay vì
     );
   }
 
-  // ✅ Dùng dữ liệu thực từ API
+
   const movieData = {
     title: movie.title || "No Title",
-    language: "ENGLISH", // Có thể lấy từ movie.original_language
+    language: "ENGLISH", // Bổ sung sau
     rating: movie.vote_average ? movie.vote_average.toFixed(1) : "N/A",
     description: movie.overview || "No description available",
-    duration: "2h 19m", // TMDB không cung cấp duration trong basic API
-    genres: movie.genre_ids ? ["Action", "Adventure"] : ["Unknown"], // Cần API riêng cho genres
+    duration: "2h 19m", 
+    genres: movie.genre_ids ? ["Action", "Adventure"] : ["Unknown"], // Láy từ API GENRE hoặc Details
     releaseDate: movie.release_date ? new Date(movie.release_date).toLocaleDateString() : "Unknown",
     poster_path: movie.poster_path
   };

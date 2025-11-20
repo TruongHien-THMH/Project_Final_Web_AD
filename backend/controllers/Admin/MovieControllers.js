@@ -88,7 +88,7 @@ exports.getNowPlayingMovie = async (req, res) => {
 
 exports.getMovieDetail = async (req, res) => {
   try {
-    const movie = await Movie.findById(req.params.id);
+    const movie = await Movie.findOne({ id: req.params.id });
     // console.log("Đã lấy được ID: ", movie);
     res.status(200).json(movie);
   } catch (error) {
