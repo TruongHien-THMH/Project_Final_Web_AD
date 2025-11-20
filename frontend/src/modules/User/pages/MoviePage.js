@@ -6,42 +6,32 @@ import NowDisplay from "../components/NowDisplay";
 import API from "../../../api.js";
 
 const MoviePage = () => {
-  const { id } = useParams();
-  const [detail, setDetail] = useState(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const getDetail = async () => {
-      try {
-        setLoading(true);
-        const res = await API.get(`/${id}`); 
-        
-        console.log("Dữ liệu chi tiết: ", res.data);
-        setDetail(res.data);
+      const {id} = useParams();
+      const [detail, setDetail] = useState(null)
+    
+    
+      useEffect(() => {
+        const getDetail = async () => {
+          try {
+            const res = await API.get(`/movie/${id}`)
+            const data = await res.data;
+    
+            console.log("Dữ liệu chi tiết: ", data);
+    
+            setDetail(data);
+    
+          } catch (error) {
+            console.log("Lỗi khi gọi hàm getDetail từ MoviePage ", error);
+          }
+        }
+        console.log(id);
+        getDetail()
+      }, [id])
+=========
+>>>>>>>>> Temporary merge branch 2:frontend/src/User/pages/MoviePage.js
 
-      } catch (error) {
-        console.log("Lỗi khi gọi hàm getDetail từ MoviePage ", error);
-        alert('Failed to load movie details');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    console.log("Movie ID:", id);
-    if (id) {
-      getDetail();
-    }
-  }, [id]);
-
-  if (loading) {
-    return (
-      <div className="bg-black min-h-screen text-white flex justify-center items-center">
-        <div>Loading movie details...</div>
-      </div>
-    );
-  }
-
-  if (!detail) {
+const MovieDetailPage = () => {
     return (
       <div className="bg-black min-h-screen text-white flex justify-center items-center">
         <div>Movie not found</div>
