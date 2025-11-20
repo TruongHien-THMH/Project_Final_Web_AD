@@ -1,8 +1,8 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import AdminSidebar from '../components/AdminSidebar';
-import HeaderAdmin from '../components/HeaderAdmin'; // Sử dụng component HeaderAdmin
-import BlurCircle from '../../User/components/BlurCircle';
+import AdminSidebar from '../modules/Admin/components/AdminSidebar';
+import HeaderAdmin from '../modules/Admin/components/HeaderAdmin'; // Sử dụng component HeaderAdmin
+import BlurCircle from '../modules/User/components/BlurCircle';
 // (Bạn sẽ tự import BlurCircle ở đây)
 
 const AdminLayout = () => {
