@@ -1,6 +1,3 @@
-import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-
 import MovieDetail from "../components/MovieDetail";
 import  ShowTimeList from "../components/ShowTimeList";
 import NowDisplay from "../components/NowDisplay";
@@ -33,11 +30,11 @@ const MoviePage = () => {
 
     return (
         <div className="bg-black min-h-screen">
-            <MovieDetail data={detail}/>
+            <MovieDetail />
             <ShowTimeList />
             <NowDisplay />
         </div>
     )
 }
 
-export default MoviePage;
+export default MovieDetailPage;

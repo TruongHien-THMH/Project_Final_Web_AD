@@ -1,5 +1,5 @@
 // const Movie = require("../models/Movie");
-const Movie = require("../models/Movie");
+const Movie = require("../../models/Movie");
 
 exports.fetchAllNowPlayingMovie = async (req, res) => {
   try {
@@ -66,7 +66,6 @@ exports.fetchAllNowPlayingMovie = async (req, res) => {
     });
   } catch (error) {
         console.log("Lỗi khi cố gọi fetchAllNowPlayingMovie", error);
-        console.error("ERROR FETCH:", error.cause);
         res
         .status(500)
         .json({ message: "Lỗi Controller BE, Kiểm tra terminal console.log" });
@@ -76,22 +75,9 @@ exports.fetchAllNowPlayingMovie = async (req, res) => {
 exports.getNowPlayingMovie = async (req, res) => {
   try {
     // Lấy dữ liệu từ database
-    const movies = await Movie.find().sort({ release_date: -1 });
-    const result = await Movie.aggregate([
-      {
-        $facet: {
-          nowPlaying: [{ $sort: { release_date: -1 }}],
-          popular: [{ $sort: { popularity: -1 } }],
-          vote: [{ $sort: { vote_average: -1} }]
-        }
-      }
-    ])
-
-    const nowPlayingMovie = result[0].nowPlaying;
-    const popular = result[0].popular;
-    const vote = result[0].vote;
-    
-    res.status(200).json({nowPlayingMovie, popular, vote});
+    const movies = await Movie.find();
+    res.status(200).json(movies);
+    // res.json({messgae: 'Đã gọi được controller'})
   } catch (err) {
     console.log("Lỗi khi gọi getNowPlayingMovie", err);
     res
@@ -102,17 +88,8 @@ exports.getNowPlayingMovie = async (req, res) => {
 
 exports.getMovieDetail = async (req, res) => {
   try {
-    // Để ý trong Mongoose có _id thì là ObjectID: >>>>
-
-    const {id} = req.params
-    const movie = await Movie.findOne({ id: id }); // Đây là id của TMDB_ID # với id của Mongoose là 1 dạng OBJ_ID
-    if(!movie) {
-      return res.status(404).json({ message: "Movie not found" });
-    }
+    const movie = await Movie.findById(req.params.id);
     // console.log("Đã lấy được ID: ", movie);
-    if (!movie) {
-      return res.status(404).json({ message: "Movie not found" });
-    }
     res.status(200).json(movie);
   } catch (error) {
     console.log("Lỗi khi gọi getMovieDetail: ", error);

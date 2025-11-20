@@ -1,102 +1,169 @@
-// src/admin/pages/AddShowsPage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MovieSelectionCard from '../components/MovieSelectionCard';
-import axios from "axios";
+import axios from 'axios';
+import API from '../../api';
 
 const AddShowsPage = () => {
   const [showPrice, setShowPrice] = useState('');
-  const [selectedDateTime, setSelectedDateTime] = useState('2025-06-20 15:23');
-  const [selectedMovie, setSelectedMovie] = useState(1); // ID của phim được chọn
+  const [selectedDateTime, setSelectedDateTime] = useState('2025-06-20 15:30');
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [cinemaHall, setCinemaHall] = useState(1);
+  const [movieBuffer, setMovieBuffer] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const movies = [
-    { id: 1, title: 'Mission Impossible', rating: 4.5, votes: '40.6K Votes', genres: 'Action, Adventure, Thriller' },
-    { id: 2, title: 'Mission Impossible', rating: 4.5, votes: '40.6K Votes', genres: 'Action, Adventure, Thriller' },
-    { id: 3, title: 'Mission Impossible', rating: 4.5, votes: '40.6K Votes', genres: 'Action, Adventure, Thriller' },
-    { id: 4, title: 'Mission Impossible', rating: 4.5, votes: '40.6K Votes', genres: 'Action, Adventure, Thriller' },
-  ];
+  useEffect(() => {
+    const getDataMovie = async () => {
+      try {
+        setLoading(true);
+        const res = await API.get("/");
+        const data = res.data;
+        console.log("Data movies from API: ", data);
+        setMovieBuffer(data);
+        
+        // Auto select first movie
+        if (data.length > 0) {
+          setSelectedMovie(data[0]._id);
+        }
+      } catch (error) {
+        console.log('Error when use getDataMovie: ', error);
+        alert('Failed to load movies');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getDataMovie();
+  }, []);
 
   const handleAddShow = async () => {
+    // Validation
+    if (!selectedMovie) {
+      alert("Please select a movie!");
+      return;
+    }
+    if (!showPrice || showPrice <= 0) {
+      alert("Please enter a valid price!");
+      return;
+    }
+    if (!selectedDateTime) {
+      alert("Please select date and time!");
+      return;
+    }
+
     try {
-      const response = await axios.post("http://localhost:3001/shows/add", {
+      // Parse datetime thành showDate và showTime
+      const [date, time] = selectedDateTime.split(' ');
+      
+      const response = await axios.post("http://localhost:5001/shows", {
         movieId: selectedMovie,
-        price: showPrice,
-        datetime: selectedDateTime,
+        price: parseInt(showPrice),
+        showTime: time,
+        showDate: date,
+        cinemaHall: parseInt(cinemaHall)
       });
 
       alert("Show added successfully!");
-      console.log(response.data);
+      console.log("Show created:", response.data);
+
+      // Reset form (giữ selected movie)
+      setShowPrice('');
+      setSelectedDateTime('2025-06-20 15:30');
+      setCinemaHall(1);
 
     } catch (error) {
-      console.error(error);
-      alert("Failed to add show");
+      console.error("Error adding show:", error);
+      alert("Failed to add show: " + (error.response?.data?.message || error.message));
     }
   };
 
+  if (loading) {
+    return (
+      <div className="text-white p-6">
+        <h1 className="text-3xl font-bold mb-6 text-rose-500">Add Shows</h1>
+        <div className="text-gray-300">Loading movies...</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="text-white">
+    <div className="text-white p-6">
       <h1 className="text-3xl font-bold mb-6 text-rose-500">Add Shows</h1>
 
       {/* 1. Chọn Phim */}
       <h2 className="text-2xl font-semibold mb-4 text-gray-300">Now Playing Movies</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
-        {movies.map((movie) => (
-          <MovieSelectionCard
-            key={movie.id}
-            movie={movie}
-            isSelected={movie.id === selectedMovie}
-            onToggle={() => setSelectedMovie(movie.id)}
-          />
-        ))}
-      </div>
+      
+      {movieBuffer.length === 0 ? (
+        <div className="text-gray-400 mb-6">No movies available. Please add movies first.</div>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
+          {movieBuffer.map((movie) => (
+            <MovieSelectionCard
+              key={movie._id}
+              movie={movie}
+              isSelected={movie._id === selectedMovie}
+              onToggle={() => setSelectedMovie(movie._id)}
+            />
+          ))}
+        </div>
+      )}
 
       {/* 2. Chi tiết suất chiếu */}
       <div className="bg-gray-800 p-6 rounded-xl shadow-2xl max-w-lg">
-        <label className="block mb-4">
-          <span className="text-gray-300 font-medium">Show Price</span>
-          <div className="relative mt-1">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">$</span>
-            <input
-              type="number"
-              placeholder="Enter show price"
-              value={showPrice}
-              onChange={(e) => setShowPrice(e.target.value)}
-              className="mt-1 block w-full bg-gray-700 border-transparent rounded-lg py-2 pl-8 pr-3 text-white placeholder-gray-400 focus:border-rose-500 focus:ring-rose-500"
-            />
-          </div>
-        </label>
-
-        <label className="block mb-4">
-          <span className="text-gray-300 font-medium">Select Date and Time</span>
-          <div className="flex space-x-3 mt-1">
-            <input
-              type="text"
-              placeholder="dd-mm-yyyy --:--"
-              className="block w-full bg-gray-700 border-transparent rounded-lg py-2 px-3 text-white placeholder-gray-400 focus:border-rose-500 focus:ring-rose-500"
-            />
-            <button className="bg-rose-600 hover:bg-rose-700 transition text-white px-4 py-2 rounded-lg font-medium whitespace-nowrap">
-              Add Time
-            </button>
-          </div>
-        </label>
-
-        {/* Thời gian đã chọn */}
-        <div className="flex items-center space-x-2 mb-6">
-          <span className="inline-flex items-center px-3 py-1 text-sm font-medium bg-rose-500 text-white rounded-full">
-            {selectedDateTime}
-            <button
-              onClick={() => setSelectedDateTime('')}
-              className="ml-2 text-white hover:text-gray-200 transition"
-            >
-              &times;
-            </button>
+        <div className="mb-4">
+          <span className="text-gray-300 font-medium">Selected Movie: </span>
+          <span className="text-rose-400 ml-2">
+            {selectedMovie ? movieBuffer.find(m => m._id === selectedMovie)?.title : 'None'}
           </span>
         </div>
 
+        <label className="block mb-4">
+          <span className="text-gray-300 font-medium">Show Price ($)</span>
+          <input
+            type="number"
+            placeholder="Enter show price"
+            value={showPrice}
+            onChange={(e) => setShowPrice(e.target.value)}
+            className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white placeholder-gray-400 focus:border-rose-500 focus:ring-rose-500"
+            min="1"
+          />
+        </label>
+
+        <label className="block mb-4">
+          <span className="text-gray-300 font-medium">Cinema Hall</span>
+          <select
+            value={cinemaHall}
+            onChange={(e) => setCinemaHall(e.target.value)}
+            className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:border-rose-500 focus:ring-rose-500"
+          >
+            <option value={1}>Hall 1</option>
+            <option value={2}>Hall 2</option>
+            <option value={3}>Hall 3</option>
+            <option value={4}>Hall 4</option>
+          </select>
+        </label>
+
+        <label className="block mb-6">
+          <span className="text-gray-300 font-medium">Select Date and Time</span>
+          <input
+            type="text"
+            placeholder="YYYY-MM-DD HH:MM"
+            value={selectedDateTime}
+            onChange={(e) => setSelectedDateTime(e.target.value)}
+            className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white placeholder-gray-400 focus:border-rose-500 focus:ring-rose-500"
+          />
+          <p className="text-sm text-gray-400 mt-1">Format: YYYY-MM-DD HH:MM (e.g., 2025-06-20 15:30)</p>
+        </label>
+
         <button
           onClick={handleAddShow}
-          className="w-full bg-rose-600 hover:bg-rose-700 transition text-white text-lg font-semibold py-2 rounded-lg shadow-lg shadow-rose-900/50"
+          disabled={!selectedMovie}
+          className={`w-full text-lg font-semibold py-2 rounded-lg shadow-lg transition ${
+            selectedMovie 
+              ? 'bg-rose-600 hover:bg-rose-700 text-white shadow-rose-900/50' 
+              : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+          }`}
         >
-          Add Show
+          {selectedMovie ? 'Add Show' : 'Select a Movie First'}
         </button>
       </div>
     </div>

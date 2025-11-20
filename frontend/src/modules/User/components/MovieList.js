@@ -1,29 +1,23 @@
+// Demo lấy dữ liệu từ BE.
+
+// viết hàm trả về 1 list phim
 import { useState, useEffect } from "react";
 import API from "../../../api"
 import MovieCard from "./MovieCard";
 
 export default function MovieList() {
-    const [moviesbuffer, setMoviesBuffer] = useState([]);
-    const [gernes, setGernes] = useState({});
+    const [movies, setMovies] = useState([]);
 
     useEffect(() => {
         const getBEData = async () => {
             try {
                 const res = await API.get('/');
-                const data = res.data;
-
-                console.log("Dữ liệu nhận được: ", data);
-
-                const nowPlaying = data.nowPlayingMovie;           
-
-                console.log('Dữ liệu trả về, ', nowPlaying);
-
-                setMoviesBuffer(nowPlaying);
-
+                console.log('Dữ liệu trả về, ', res);
+                setMovies(res.data);
             } catch (error) {
-                console.log("Lấy dữ liệu phim bị lỗi: ", error);
-                // res.status(500).json({message: "Lỗi từ MovieList"});
+                console.error(error);
             }
+            
         }
 
         getBEData()
@@ -34,19 +28,37 @@ export default function MovieList() {
         {/* <!-- Tiêu đề --> */}
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-semibold">Now Showing</h2>
-          <button 
-          className="text-gray-300 text-sm hover:text-rose-600 transition flex items-center gap-1 bg-transparent border-none cursor-pointer">
+          <button className="text-gray-300 text-sm hover:text-rose-600 transition flex items-center gap-1 bg-transparent border-none cursor-pointer">
             View All <i className="ri-arrow-right-line"></i>
           </button>
         </div>
 
         {/* <!-- Grid phim --> */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {
-            moviesbuffer.map(movie => (
-              <MovieCard data={movie}/>
-            ))
-          }
+          {/* <!-- Card 1 --> */}
+          <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition">
+            <div className="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold">
+              A
+            </div>
+            <div className="p-4">
+              <h3 className="font-semibold mb-2">Tiêu đề phim 1</h3>
+              <p className="text-sm text-gray-400 mb-4">
+                2018 - Action, Adventure - 2h 8m
+              </p>
+              <div className="flex justify-between items-center">
+                <button className="bg-rose-600 hover:bg-rose-700 transition text-white px-4 py-2 rounded-full text-sm">
+                  Buy Ticket
+                </button>
+                <div className="flex items-center gap-1 text-gray-300">
+                  <i className="ri-star-fill text-rose-600"></i>
+                  <span>4.5</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <MovieCard data={movies} />
+
         </div>
 
         {/* <!-- Nút "Show more" --> */}

@@ -41,7 +41,7 @@ const ShowtimeList = () => {
     <section className="bg-[#0d0d0d] text-white px-6 py-10 md:px-20 w-full">
 
       {/* Date selector */}
-      <div className="bg-gradient-to-br from-[#4a0a15] to-[#2d0a10] w-1000px p-6 rounded-xl mb-10 flex justify-between items-center">
+      <div className="bg-gradient-to-br from-[#4a0a15] to-[#2d0a10] p-6 rounded-xl mb-10 flex justify-between items-center">
         <h2 class="text-xl font-semibold">Choose Date</h2>
         <button class="text-sm text-gray-200 hover:text-white transition">Book Now</button>
       </div>

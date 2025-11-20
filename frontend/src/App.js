@@ -49,7 +49,7 @@ function App() {
           />
 
           <Route 
-             path="/movie/:id"
+             path="movie"
              element={<MoviePage />}
           />
           
