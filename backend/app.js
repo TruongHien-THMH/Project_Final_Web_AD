@@ -12,18 +12,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const movieRoutes = require("./routes/movieRoutes");
-const showRoutes = require("./routes/showRoutes");
+const adminShowRoutes = require("./routes/showRoutes"); // Admin routes
+const userShowRoutes = require("./routes/userShowRoutes"); // User booking routes
 
+// Routes
 app.use("/api/cinema", movieRoutes);
-app.use("/shows", showRoutes);
+app.use("/shows", adminShowRoutes); // Admin: CRUD shows
+app.use("/api/shows", userShowRoutes); // User: Booking seats
 
 const PORT = 5001 || process.env.PORT;
 
 connectDB().then(() => {
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
-        // corn;
-        // require("./cron/fetchMovie");
     });
 });
-
