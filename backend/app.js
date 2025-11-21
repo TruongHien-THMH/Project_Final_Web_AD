@@ -12,21 +12,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const movieUserRouter = require("./routes/users/movie_user_route");
+const adminShowRoutes = require("./routes/showRoutes");
+const userShowRoutes = require("./routes/userShowRoutes");
+const movieRoutes = require("./routes/movieRoutes"); 
 
-const adminShowRoutes = require("./routes/showRoutes"); // Admin routes
-const userShowRoutes = require("./routes/userShowRoutes"); // User booking routes
-
-// Các user chỉ đi với api/...;
 app.use("/api/cinema", movieUserRouter);
-app.use("/api/showTime", userShowRoutes); // User: Booking seats
+app.use("/api/cinema", movieRoutes); 
+app.use("/api/showTime", userShowRoutes);
+app.use("/api/admin/shows", adminShowRoutes); 
 
-// Các Admin sẽ name = api/admin/...;
-app.use("api/admin/shows", adminShowRoutes); // Admin: CRUD shows
-
-const PORT = 5001 || process.env.PORT;
+const PORT = process.env.PORT || 5001;
 
 connectDB().then(() => {
     app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
+        console.log(`✅ Server running on port ${PORT}`);
     });
 });

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../../../api';
 import AdminTable from '../components/AdminTable';
 
-const ListBookingsPage = () => {
+const ListShowsPage = () => {
   const [shows, setShows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -15,7 +15,7 @@ const ListBookingsPage = () => {
     try {
       setLoading(true);
       setError('');
-      const response = await axios.get('http://localhost:5001/shows');
+      const response = await API.get('/admin/shows');
       console.log('Shows data:', response.data);
       
       if (response.data.success) {
@@ -34,9 +34,10 @@ const ListBookingsPage = () => {
   const handleDeleteShow = async (showId) => {
     if (window.confirm('Are you sure you want to delete this show?')) {
       try {
-        await axios.delete(`http://localhost:5001/shows/${showId}`);
+       
+        await API.delete(`/admin/shows/${showId}`);
         alert('Show deleted successfully!');
-        fetchShows(); // Refresh data
+        fetchShows(); 
       } catch (error) {
         console.error('Error deleting show:', error);
         alert('Failed to delete show: ' + (error.response?.data?.message || error.message));
@@ -106,4 +107,4 @@ const ListBookingsPage = () => {
   );
 };
 
-export default ListBookingsPage;
+export default ListShowsPage;
