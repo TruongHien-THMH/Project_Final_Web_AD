@@ -11,14 +11,17 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const movieRoutes = require("./routes/movieRoutes");
+const movieUserRouter = require("./routes/users/movie_user_route");
+
 const adminShowRoutes = require("./routes/showRoutes"); // Admin routes
 const userShowRoutes = require("./routes/userShowRoutes"); // User booking routes
 
-// Routes
-app.use("/api/cinema", movieRoutes);
-app.use("/shows", adminShowRoutes); // Admin: CRUD shows
-app.use("/api/shows", userShowRoutes); // User: Booking seats
+// Các user chỉ đi với api/...;
+app.use("/api/cinema", movieUserRouter);
+app.use("/api/showTime", userShowRoutes); // User: Booking seats
+
+// Các Admin sẽ name = api/admin/...;
+app.use("api/admin/shows", adminShowRoutes); // Admin: CRUD shows
 
 const PORT = 5001 || process.env.PORT;
 

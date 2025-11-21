@@ -23,9 +23,6 @@ import  { adminRouter} from './routes/adminRoutes';
 // import MoviePage from './User/pages/MoviePage';
 
 function App() {
-
-
-
   return (
     <BrowserRouter>
       <Routes>

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const ShowController = require('../controllers/User/ShowController');
+const ShowController = require('../controllers/User/showTime_user_controller');
 
 // User booking routes
 router.get('/:showId/seats', ShowController.getSeats);

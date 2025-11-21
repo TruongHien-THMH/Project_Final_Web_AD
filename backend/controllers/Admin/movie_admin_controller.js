@@ -77,7 +77,7 @@ exports.getNowPlayingMovie = async (req, res) => {
     // Lấy dữ liệu từ database
     const movies = await Movie.find();
     res.status(200).json(movies);
-    // res.json({messgae: 'Đã gọi được controller'})
+    
   } catch (err) {
     console.log("Lỗi khi gọi getNowPlayingMovie", err);
     res

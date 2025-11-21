@@ -12,7 +12,7 @@ export default function MovieList() {
         const getBEData = async () => {
             try {
                 const res = await API.get('/');
-                console.log('Dữ liệu trả về, ', res);
+                console.log("Kết nối BE thành công !!!");
                 setMovies(res.data);
             } catch (error) {
                 console.error(error);
