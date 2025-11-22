@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import MovieDetail from "../components/MovieDetail";
 import ShowTimeList from "../components/ShowTimeList";
 import NowDisplay from "../components/NowDisplay";
+
 import API from "../../../api.js";
 
 const MoviePage = () => {
