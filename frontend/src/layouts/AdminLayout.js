@@ -2,14 +2,13 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import AdminSidebar from '../modules/Admin/components/AdminSidebar';
 import HeaderAdmin from '../modules/Admin/components/HeaderAdmin'; // Sử dụng component HeaderAdmin
+import Footer from '../modules/User/components/Footer';
 import BlurCircle from '../modules/User/components/BlurCircle';
 // (Bạn sẽ tự import BlurCircle ở đây)
 
 const AdminLayout = () => {
   return (
-    
     <div className="flex bg-gray-900 min-h-screen relative overflow-hidden">
-    
       {/* 2. Thêm BlurCircle ngay tại đây, ở lớp dưới cùng (sau nền) */}
       {/* Bạn có thể thêm bao nhiêu tùy thích và đổi vị trí */}
       <BlurCircle top="-100px" left="-100px" />
@@ -33,6 +32,9 @@ const AdminLayout = () => {
         <main className="p-8 flex-1">
           <Outlet /> 
         </main>
+
+       <Footer/>
+
       </div>
     </div>
   );

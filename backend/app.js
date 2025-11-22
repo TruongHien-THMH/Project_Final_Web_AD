@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 const movieUserRouter = require("./routes/users/movie_user_route");
 const adminShowRoutes = require("./routes/showRoutes");
 const userShowRoutes = require("./routes/userShowRoutes");
-const movieRoutes = require("./routes/users/movie_user_route"); 
+
 
 app.use("/api/cinema", movieUserRouter);
 // app.use("/api/cinema", movieRoutes); 
