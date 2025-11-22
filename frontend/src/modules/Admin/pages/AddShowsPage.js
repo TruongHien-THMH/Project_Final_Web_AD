@@ -10,17 +10,19 @@ const AddShowsPage = () => {
   const [cinemaHall, setCinemaHall] = useState(1);
   const [movieBuffer, setMovieBuffer] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getDataMovie = async () => {
       try {
         setLoading(true);
-        const res = await API.get("/");
+        
+        const res = await API.get("/cinema");
         const data = res.data;
         console.log("Data movies from API: ", data);
         setMovieBuffer(data);
         
-        // Auto select first movie
+        
         if (data.length > 0) {
           setSelectedMovie(data[0]._id);
         }
@@ -36,7 +38,7 @@ const AddShowsPage = () => {
   }, []);
 
   const handleAddShow = async () => {
-    // Validation
+    
     if (!selectedMovie) {
       alert("Please select a movie!");
       return;
@@ -51,10 +53,11 @@ const AddShowsPage = () => {
     }
 
     try {
-      // Parse datetime thành showDate và showTime
+      
       const [date, time] = selectedDateTime.split(' ');
       
-      const response = await axios.post("http://localhost:5001/shows", {
+     
+      const response = await API.post("/admin/shows", {
         movieId: selectedMovie,
         price: parseInt(showPrice),
         showTime: time,
@@ -65,7 +68,10 @@ const AddShowsPage = () => {
       alert("Show added successfully!");
       console.log("Show created:", response.data);
 
-      // Reset form (giữ selected movie)
+    
+      navigate('/admin/list-shows');
+
+      
       setShowPrice('');
       setSelectedDateTime('2025-06-20 15:30');
       setCinemaHall(1);
