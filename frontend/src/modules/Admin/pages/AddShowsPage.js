@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MovieSelectionCard from '../components/MovieSelectionCard';
-import API from '../../../api';
-import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import API from '../../../api/ApiClient';
 
 const AddShowsPage = () => {
   const [showPrice, setShowPrice] = useState('');
