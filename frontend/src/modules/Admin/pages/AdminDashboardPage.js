@@ -1,7 +1,8 @@
 // src/admin/pages/AdminDashboardPage.js
 import React, {useEffect, useState }from 'react';
 import StatsCard from '../components/StatsCard';
-import MovieCard from '../../../ components/ui/MovieCard_user';
+// import MovieCard from '../../../ components/ui/MovieCard_user';
+import MovieCard from '../../Admin/components/MovieCard';
 import API from '../../../api/ApiClient';
 
 const AdminDashboardPage = () => {
@@ -13,11 +14,11 @@ const AdminDashboardPage = () => {
   ];
 
   // Dữ liệu giả định cho Active Movies
-  // const activeMovies = [
-  //   { title: 'Alita Battle Angel 4k 2019 Movies', rating: 4.5, price: 29 },
-  //   { title: 'Alita Battle Angel 4k 2019 Movies', rating: 4.5, price: 29 },
-  //   { title: 'Alita Battle Angel 4k 2019 Movies', rating: 4.5, price: 29 },
-  // ];
+  const activeMovies = [
+    { title: 'Alita Battle Angel 4k 2019 Movies', rating: 4.5, price: 29 },
+    { title: 'Alita Battle Angel 4k 2019 Movies', rating: 4.5, price: 29 },
+    { title: 'Alita Battle Angel 4k 2019 Movies', rating: 4.5, price: 29 },
+  ];
 
   const [dataBuffer, setDataBuffer] = useState([]);
 

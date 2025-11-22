@@ -14,14 +14,14 @@ app.use(express.urlencoded({ extended: true }));
 const movieUserRouter = require("./routes/users/movie_user_route");
 const adminShowRoutes = require("./routes/showRoutes");
 const userShowRoutes = require("./routes/userShowRoutes");
-const movieRoutes = require("./routes/movieRoutes"); 
+const movieRoutes = require("./routes/users/movie_user_route"); 
 
 app.use("/api/cinema", movieUserRouter);
-app.use("/api/cinema", movieRoutes); 
+// app.use("/api/cinema", movieRoutes); 
 app.use("/api/showTime", userShowRoutes);
 app.use("/api/admin/shows", adminShowRoutes); 
 
-const PORT = process.env.PORT || 5001;
+const PORT = 5001 || process.env.PORT ;
 
 connectDB().then(() => {
     app.listen(PORT, () => {
