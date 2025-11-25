@@ -9,5 +9,6 @@ router.get("/movie/:id", movieServices.getMovieDetail);
 router.post('/', movieCtl.createMovie);
 
 router.get('/fetchData', movieCtl.fetchAllNowPlayingMovie);
+router.get('/fetchGenres', movieCtl.fetchGenres);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 // const Movie = require("../models/Movie");
-const Movie = require("../../models/Movie");
+const Movies = require("../../models/Movies");
+const Genres = require("../../models/Genres");
 
 exports.fetchAllNowPlayingMovie = async (req, res) => {
   try {
@@ -27,6 +28,25 @@ exports.fetchAllNowPlayingMovie = async (req, res) => {
     }
     const data = await tmdbRes.json();
 
+    const genres = await Genres.find();
+
+    // Join genres và movies
+    const genresMap = {}
+    genres.forEach( genreJson => {
+        // Ví dụ genresMap[28] == _id obj Id của mongoose
+        genresMap[genreJson.id] = genreJson._id;
+    })
+
+    const movies = data.results.map(movie => ({
+      ...movie,
+      genres: movie.genre_ids.map(id => genresMap[id])
+    }))
+
+    // Xóa dữ liệu cũ
+    console.log("🗑️ Đang xóa dữ liệu cũ...");
+    const deleteResult = await Movies.deleteMany({});
+    console.log(`✅ Đã xóa ${deleteResult.deletedCount} phim cũ`);
+
     console.log("📦 Số lượng phim nhận được:", data.results?.length || 0);
 
     // Kiểm tra data
@@ -38,18 +58,13 @@ exports.fetchAllNowPlayingMovie = async (req, res) => {
       });
     }
 
-    // Xóa dữ liệu cũ
-    console.log("🗑️ Đang xóa dữ liệu cũ...");
-    const deleteResult = await Movie.deleteMany({});
-    console.log(`✅ Đã xóa ${deleteResult.deletedCount} phim cũ`);
-
     // Thêm dữ liệu mới
     console.log("💾 Đang lưu dữ liệu mới...");
-    const insertResult = await Movie.insertMany(data.results);
+    const insertResult = await Movies.insertMany(movies);
     console.log(`✅ Đã thêm ${insertResult.length} phim mới`);
 
     // Verify data đã được lưu
-    const count = await Movie.countDocuments();
+    const count = await Movies.countDocuments();
     console.log(`📊 Tổng số phim trong DB: ${count}`);
 
     console.log("=".repeat(50));
@@ -66,11 +81,60 @@ exports.fetchAllNowPlayingMovie = async (req, res) => {
     });
   } catch (error) {
         console.log("Lỗi khi cố gọi fetchAllNowPlayingMovie", error);
-        res
+        return res
         .status(500)
-        .json({ message: "Lỗi Controller BE, Kiểm tra terminal console.log" });
+        .json({ 
+          message: "Lỗi Controller BE, Kiểm tra terminal console.log"
+        });
   }
 };
+
+exports.fetchGenres = async (req, res) => {
+  try {
+    const url = process.env.GENRES_BASE_URL;
+    const opt = {
+          method: "GET",
+          headers: {
+          accept: "application/json",
+          Authorization:
+              `Bearer ${process.env.ACCESS_TOKEN}`,
+          },
+      };
+    const data = await fetch(url, opt);
+
+    if(!data.ok){
+        throw new Error(`TMDB API error: ${data.status}`);
+    }
+
+    const genresJson = await data.json();
+    // const genresArr = genresJson.genres;
+
+    await Genres.deleteMany({});
+
+    // await Genres.insertMany(genresJson.genres);
+
+    genresJson.genres.forEach(genre => {
+      Genres.insertOne(genre);
+    });
+
+    if(Genres.length > 0){
+      console.log("Thêm thành công");
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Thêm thể loại phim thành công",
+      data: {
+        gernesList:  genresJson.genres
+      }
+    });
+    
+
+  } catch (error) {
+    console.log("Lỗi không thể gọi fetchGernes: ");
+    console.log("Lỗi khi call BE: ", error);
+  }
+}
 
 exports.getNowPlayingMovie = async (req, res) => {
   try {

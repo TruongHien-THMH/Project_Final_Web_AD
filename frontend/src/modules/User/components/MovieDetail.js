@@ -19,8 +19,9 @@ const MovieDetail = ({ movie }) => {
     language: "ENGLISH", // Bổ sung sau
     rating: movie.vote_average ? movie.vote_average.toFixed(1) : "N/A",
     description: movie.overview || "No description available",
-    duration: "2h 19m", 
-    genres: movie.genre_ids ? ["Action", "Adventure"] : ["Unknown"], // Láy từ API GENRE hoặc Details
+    duration: movie.runtime || "Not update yet" , 
+    // genres_ids: movie.genre_ids ? ["Action", "Adventure"] : ["Unknown"], // Láy từ API GENRE hoặc Detail
+    genres: movie.genres.map(g => g.name), // Láy từ API GENRE hoặc Details
     releaseDate: movie.release_date ? new Date(movie.release_date).toLocaleDateString() : "Unknown",
     poster_path: movie.poster_path
   };
@@ -76,7 +77,7 @@ const MovieDetail = ({ movie }) => {
           <p className="text-gray-400 leading-relaxed">{movieData.description}</p>
 
           <p className="text-gray-400 pt-2">
-            {movieData.duration} • {movieData.genres.join(" | ")} • {movieData.releaseDate}
+            {movieData.duration} minutes • {movieData.genres.join(" | ")} • {movieData.releaseDate.split("-")}
           </p>
 
           {/* BUTTONS */}
