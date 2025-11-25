@@ -1,5 +1,5 @@
 const Show = require('../../models/Show');
-const Movie = require('../../models/Movie');
+const Movies = require('../../models/Movies');
 
 exports.addShow = async (req, res) => {
   try {
@@ -9,7 +9,7 @@ exports.addShow = async (req, res) => {
       return res.status(400).json({ message: "Missing fields!" });
     }
 
-    const movie = await Movie.findById(movieId);
+    const movie = await Movies.findById(movieId);
     if (!movie) {
       return res.status(404).json({ message: "Movie not found!" });
     }
@@ -84,7 +84,7 @@ exports.seedShows = async (req, res) => {
   try {
     const { movieId } = req.params;
     
-    const movie = await Movie.findById(movieId);
+    const movie = await Movies.findById(movieId);
     if (!movie) {
       return res.status(404).json({ 
         success: false,

@@ -12,13 +12,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const movieUserRouter = require("./routes/users/movie_user_route");
-const adminShowRoutes = require("./routes/showRoutes");
 const userShowRoutes = require("./routes/userShowRoutes");
 
+const adminShowRoutes = require("./routes/showRoutes");
+const adminMovieRoutes = require("./routes/admin/movieRoutes");
 
 app.use("/api/cinema", movieUserRouter);
 // app.use("/api/cinema", movieRoutes); 
 app.use("/api/showTime", userShowRoutes);
+app.use("/api/admin/movie", adminMovieRoutes);
 app.use("/api/admin/shows", adminShowRoutes); 
 
 const PORT = 5001 || process.env.PORT ;

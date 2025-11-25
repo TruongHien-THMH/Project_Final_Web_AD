@@ -15,8 +15,7 @@ const AdminDashboardPage = () => {
 
   const [dataBuffer, setDataBuffer] = useState([]);
 
-  useEffect(() => {
-    const fetchMovieData = async () => {
+  const fetchMovieData = async () => {
       try {
         const res = await API.get('/');
         console.log("Dữ liệu lấy từ API: ", res);
@@ -31,6 +30,7 @@ const AdminDashboardPage = () => {
       }
     }
 
+  useEffect(() => {
     fetchMovieData();
   }, [])
 

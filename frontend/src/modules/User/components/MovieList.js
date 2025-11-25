@@ -57,7 +57,7 @@ export default function MovieList() {
             </div>
           </div>
 
-          <MovieCard data={movies} />
+          <MovieCard movieList={movies} />
 
         </div>
 
