@@ -4,12 +4,16 @@ import axios from 'axios';
 import API from '../../../api/ApiClient';
 
 const AddShowsPage = () => {
-  const [showPrice, setShowPrice] = useState('');
   const [selectedDateTime, setSelectedDateTime] = useState('2025-06-20 15:30');
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [cinemaHall, setCinemaHall] = useState(1);
   const [movieBuffer, setMovieBuffer] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  // Tìm thông tin phim được chọn
+  const selectedMovieInfo = selectedMovie 
+    ? movieBuffer.find(m => m._id === selectedMovie) 
+    : null;
 
   useEffect(() => {
     const getDataMovie = async () => {
@@ -36,13 +40,9 @@ const AddShowsPage = () => {
   }, []);
 
   const handleAddShow = async () => {
-    // Validation
+    // Validation (đã bỏ kiểm tra giá tiền)
     if (!selectedMovie) {
       alert("Please select a movie!");
-      return;
-    }
-    if (!showPrice || showPrice <= 0) {
-      alert("Please enter a valid price!");
       return;
     }
     if (!selectedDateTime) {
@@ -56,7 +56,7 @@ const AddShowsPage = () => {
       
       const response = await axios.post("http://localhost:5001/shows", {
         movieId: selectedMovie,
-        price: parseInt(showPrice),
+        price: 0, // Đặt giá mặc định là 0 vì đã có giá ghế
         showTime: time,
         showDate: date,
         cinemaHall: parseInt(cinemaHall)
@@ -66,7 +66,6 @@ const AddShowsPage = () => {
       console.log("Show created:", response.data);
 
       // Reset form (giữ selected movie)
-      setShowPrice('');
       setSelectedDateTime('2025-06-20 15:30');
       setCinemaHall(1);
 
@@ -112,21 +111,11 @@ const AddShowsPage = () => {
         <div className="mb-4">
           <span className="text-gray-300 font-medium">Selected Movie: </span>
           <span className="text-rose-400 ml-2">
-            {selectedMovie ? movieBuffer.find(m => m._id === selectedMovie)?.title : 'None'}
+            {selectedMovieInfo ? String(selectedMovieInfo.title || selectedMovieInfo.name || 'Unknown Movie') : 'None'}
           </span>
         </div>
 
-        <label className="block mb-4">
-          <span className="text-gray-300 font-medium">Show Price ($)</span>
-          <input
-            type="number"
-            placeholder="Enter show price"
-            value={showPrice}
-            onChange={(e) => setShowPrice(e.target.value)}
-            className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white placeholder-gray-400 focus:border-rose-500 focus:ring-rose-500"
-            min="1"
-          />
-        </label>
+        {/* ĐÃ XÓA PHẦN NHẬP GIÁ TIỀN */}
 
         <label className="block mb-4">
           <span className="text-gray-300 font-medium">Cinema Hall</span>
@@ -153,6 +142,11 @@ const AddShowsPage = () => {
           />
           <p className="text-sm text-gray-400 mt-1">Format: YYYY-MM-DD HH:MM (e.g., 2025-06-20 15:30)</p>
         </label>
+
+        {/* Thêm thông báo về giá vé */}
+        <div className="mb-4 p-3 bg-gray-700 rounded-lg">
+          <p className="text-rose-400 text-sm">💺 <strong>Ticket pricing:</strong> Already configured in seat system</p>
+        </div>
 
         <button
           onClick={handleAddShow}
