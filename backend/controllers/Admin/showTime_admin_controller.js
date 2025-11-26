@@ -5,31 +5,113 @@ exports.addShow = async (req, res) => {
   try {
     const { movieId, showTime, showDate, price, cinemaHall } = req.body;
 
-    if (!movieId || !showTime || !showDate || !price || !cinemaHall) {
-      return res.status(400).json({ message: "Missing fields!" });
-    }
-
-    const movie = await Movies.findById(movieId);
-    if (!movie) {
-      return res.status(404).json({ message: "Movie not found!" });
-    }
-
-    const newShow = await Show.create({
+    console.log("🔍 [DEBUG] Received data:", {
       movieId,
-      showTime,
+      showTime, 
       showDate,
       price,
-      cinemaHall
+      cinemaHall,
+      fullBody: req.body
     });
 
+    // Validation chi tiết để biết field nào thiếu
+    if (!movieId) {
+      console.log("❌ Missing movieId");
+      return res.status(400).json({ success: false, message: "Missing movieId field!" });
+    }
+    if (!showTime) {
+      console.log("❌ Missing showTime");
+      return res.status(400).json({ success: false, message: "Missing showTime field!" });
+    }
+    if (!showDate) {
+      console.log("❌ Missing showDate");
+      return res.status(400).json({ success: false, message: "Missing showDate field!" });
+    }
+    if (price === undefined || price === null) {
+      console.log("❌ Missing price");
+      return res.status(400).json({ success: false, message: "Missing price field!" });
+    }
+    if (!cinemaHall) {
+      console.log("❌ Missing cinemaHall");
+      return res.status(400).json({ success: false, message: "Missing cinemaHall field!" });
+    }
+
+    console.log("🎬 Finding movie with ID:", movieId);
+    const movie = await Movies.findById(movieId);
+    if (!movie) {
+      console.log("❌ Movie not found with ID:", movieId);
+      return res.status(404).json({ success: false, message: "Movie not found!" });
+    }
+
+    console.log("✅ Movie found:", movie.title);
+
+    // Tạo seat layout mặc định
+    const createDefaultSeatLayout = () => ({
+      rows: [
+        {
+          rowId: 'A',
+          rowLabel: 'A',
+          seatType: 'VIP',
+          seats: Array(9).fill(null).map((_, i) => ({
+            seatId: `A${i + 1}`,
+            number: i + 1,
+            isAisle: false
+          }))
+        },
+        {
+          rowId: 'B',
+          rowLabel: 'B',
+          seatType: 'VIP',
+          seats: Array(9).fill(null).map((_, i) => ({
+            seatId: `B${i + 1}`,
+            number: i + 1,
+            isAisle: false
+          }))
+        },
+        ...['C', 'D', 'E', 'F', 'G', 'H'].map(letter => ({
+          rowId: letter,
+          rowLabel: letter,
+          seatType: 'STANDARD',
+          seats: Array(16).fill(null).map((_, i) => ({
+            seatId: `${letter}${i + 1}`,
+            number: i + 1,
+            isAisle: false
+          }))
+        }))
+      ]
+    });
+
+    const showData = {
+      movieId,
+      showTime,
+      showDate, 
+      price: parseInt(price) || 0,
+      cinemaHall: parseInt(cinemaHall),
+      pricing: { vip: 100000, standard: 65000 }, // Thêm pricing
+      seatLayout: createDefaultSeatLayout(), // Thêm seatLayout
+      seatStatus: [] // Thêm seatStatus rỗng
+    };
+
+    console.log("💾 Creating show with data:", showData);
+    
+    const newShow = await Show.create(showData);
+
+    console.log("🎉 Show created successfully! ID:", newShow._id);
+
     res.status(201).json({
+      success: true,
       message: "Show created successfully!",
       show: newShow
     });
 
   } catch (error) {
-    console.error("Error adding show:", error);
-    res.status(500).json({ message: "Server error", error: error.message });
+    console.error("💥 Error adding show:", error);
+    console.error("📝 Error stack:", error.stack);
+    res.status(500).json({ 
+      success: false,
+      message: "Server error", 
+      error: error.message 
+    });
   }
 };
 

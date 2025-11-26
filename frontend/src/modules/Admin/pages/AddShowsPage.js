@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import MovieSelectionCard from '../components/MovieSelectionCard';
 import axios from 'axios';
-import API from '../../../api/ApiClient';
 
 const AddShowsPage = () => {
-  const [selectedDateTime, setSelectedDateTime] = useState('2025-06-20 15:30');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('10:30');
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [cinemaHall, setCinemaHall] = useState(1);
   const [movieBuffer, setMovieBuffer] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  // Tìm thông tin phim được chọn
   const selectedMovieInfo = selectedMovie 
     ? movieBuffer.find(m => m._id === selectedMovie) 
     : null;
@@ -19,15 +19,17 @@ const AddShowsPage = () => {
     const getDataMovie = async () => {
       try {
         setLoading(true);
-        const res = await API.get("/");
+        const res = await axios.get("http://localhost:5001/api/admin/movie");
         const data = res.data;
         console.log("Data movies from API: ", data);
         setMovieBuffer(data);
         
-        // Auto select first movie
         if (data.length > 0) {
           setSelectedMovie(data[0]._id);
         }
+
+        const today = new Date().toISOString().split('T')[0];
+        setSelectedDate(today);
       } catch (error) {
         console.log('Error when use getDataMovie: ', error);
         alert('Failed to load movies');
@@ -40,38 +42,75 @@ const AddShowsPage = () => {
   }, []);
 
   const handleAddShow = async () => {
-    // Validation (đã bỏ kiểm tra giá tiền)
+    // Validation chi tiết hơn
     if (!selectedMovie) {
       alert("Please select a movie!");
       return;
     }
-    if (!selectedDateTime) {
-      alert("Please select date and time!");
+    if (!selectedDate) {
+      alert("Please select date!");
+      return;
+    }
+    if (!selectedTime) {
+      alert("Please select time!");
       return;
     }
 
     try {
-      // Parse datetime thành showDate và showTime
-      const [date, time] = selectedDateTime.split(' ');
+      setSubmitting(true);
+
+      // Định dạng lại date để đảm bảo đúng format YYYY-MM-DD
+      const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
       
-      const response = await axios.post("http://localhost:5001/shows", {
+      const showData = {
         movieId: selectedMovie,
-        price: 0, // Đặt giá mặc định là 0 vì đã có giá ghế
-        showTime: time,
-        showDate: date,
+        price: 0,
+        showTime: selectedTime.replace(' AM', '').replace(' PM', ''), // Chỉ lấy "10:30"
+        showDate: formattedDate,
         cinemaHall: parseInt(cinemaHall)
-      });
+      };
 
-      alert("Show added successfully!");
-      console.log("Show created:", response.data);
+      console.log("📤 Sending show data:", showData);
+      console.log("🎬 Selected movie ID:", selectedMovie);
+      console.log("📅 Date:", formattedDate);
+      console.log("⏰ Time:", selectedTime);
+      console.log("🎪 Hall:", cinemaHall);
 
-      // Reset form (giữ selected movie)
-      setSelectedDateTime('2025-06-20 15:30');
-      setCinemaHall(1);
+      const response = await axios.post("http://localhost:5001/api/admin/shows", showData);
+      console.log("✅ API Response:", response.data);
+
+      if (response.data.success) {
+        alert("Show added successfully!");
+        console.log("Show created:", response.data);
+
+        // Reset form
+        setSelectedTime('10:30');
+        setCinemaHall(1);
+        
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        setSelectedDate(tomorrow.toISOString().split('T')[0]);
+      } else {
+        throw new Error(response.data.message || "Failed to add show");
+      }
 
     } catch (error) {
-      console.error("Error adding show:", error);
-      alert("Failed to add show: " + (error.response?.data?.message || error.message));
+      console.error("❌ Error adding show:", error);
+      console.error("🔍 Error response:", error.response?.data);
+      
+      let errorMessage = "Failed to add show";
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      alert("Failed to add show: " + errorMessage);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -88,7 +127,6 @@ const AddShowsPage = () => {
     <div className="text-white p-6">
       <h1 className="text-3xl font-bold mb-6 text-rose-500">Add Shows</h1>
 
-      {/* 1. Chọn Phim */}
       <h2 className="text-2xl font-semibold mb-4 text-gray-300">Now Playing Movies</h2>
       
       {movieBuffer.length === 0 ? (
@@ -106,16 +144,15 @@ const AddShowsPage = () => {
         </div>
       )}
 
-      {/* 2. Chi tiết suất chiếu */}
       <div className="bg-gray-800 p-6 rounded-xl shadow-2xl max-w-lg">
         <div className="mb-4">
           <span className="text-gray-300 font-medium">Selected Movie: </span>
           <span className="text-rose-400 ml-2">
             {selectedMovieInfo ? String(selectedMovieInfo.title || selectedMovieInfo.name || 'Unknown Movie') : 'None'}
           </span>
+          <br />
+          <span className="text-gray-400 text-sm">Movie ID: {selectedMovie}</span>
         </div>
-
-        {/* ĐÃ XÓA PHẦN NHẬP GIÁ TIỀN */}
 
         <label className="block mb-4">
           <span className="text-gray-300 font-medium">Cinema Hall</span>
@@ -131,33 +168,54 @@ const AddShowsPage = () => {
           </select>
         </label>
 
-        <label className="block mb-6">
-          <span className="text-gray-300 font-medium">Select Date and Time</span>
+        <label className="block mb-4">
+          <span className="text-gray-300 font-medium">Select Date</span>
           <input
-            type="text"
-            placeholder="YYYY-MM-DD HH:MM"
-            value={selectedDateTime}
-            onChange={(e) => setSelectedDateTime(e.target.value)}
-            className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white placeholder-gray-400 focus:border-rose-500 focus:ring-rose-500"
+            type="date"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            min={new Date().toISOString().split('T')[0]}
+            className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:border-rose-500 focus:ring-rose-500"
           />
-          <p className="text-sm text-gray-400 mt-1">Format: YYYY-MM-DD HH:MM (e.g., 2025-06-20 15:30)</p>
+          <span className="text-gray-400 text-sm mt-1">Current: {selectedDate}</span>
         </label>
 
-        {/* Thêm thông báo về giá vé */}
+        <label className="block mb-6">
+          <span className="text-gray-300 font-medium">Select Time</span>
+          <select
+            value={selectedTime}
+            onChange={(e) => setSelectedTime(e.target.value)}
+            className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:border-rose-500 focus:ring-rose-500"
+          >
+            <option value="09:00">09:00 AM</option>
+            <option value="10:30">10:30 AM</option>
+            <option value="12:00">12:00 PM</option>
+            <option value="14:30">02:30 PM</option>
+            <option value="15:30">03:30 PM</option>
+            <option value="17:00">05:00 PM</option>
+            <option value="19:00">07:00 PM</option>
+            <option value="20:30">08:30 PM</option>
+            <option value="22:00">10:00 PM</option>
+          </select>
+          <span className="text-gray-400 text-sm mt-1">Sending: {selectedTime.replace(' AM', '').replace(' PM', '')}</span>
+        </label>
+
         <div className="mb-4 p-3 bg-gray-700 rounded-lg">
-          <p className="text-rose-400 text-sm">💺 <strong>Ticket pricing:</strong> Already configured in seat system</p>
+          <p className="text-rose-400 text-sm">💺 <strong>Ticket pricing:</strong> VIP: $100,000 | Standard: $65,000</p>
+          <p className="text-gray-400 text-xs mt-1">Price is automatically configured in the seat system</p>
         </div>
 
         <button
           onClick={handleAddShow}
-          disabled={!selectedMovie}
+          disabled={!selectedMovie || !selectedDate || !selectedTime || submitting}
           className={`w-full text-lg font-semibold py-2 rounded-lg shadow-lg transition ${
-            selectedMovie 
+            selectedMovie && selectedDate && selectedTime && !submitting
               ? 'bg-rose-600 hover:bg-rose-700 text-white shadow-rose-900/50' 
               : 'bg-gray-600 text-gray-400 cursor-not-allowed'
           }`}
         >
-          {selectedMovie ? 'Add Show' : 'Select a Movie First'}
+          {submitting ? 'Adding Show...' : 
+           selectedMovie && selectedDate && selectedTime ? 'Add Show' : 'Select Movie, Date & Time'}
         </button>
       </div>
     </div>
