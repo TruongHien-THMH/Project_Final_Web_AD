@@ -16,12 +16,22 @@ const userShowRoutes = require("./routes/userShowRoutes");
 
 const adminShowRoutes = require("./routes/showRoutes");
 const adminMovieRoutes = require("./routes/admin/movieRoutes");
-
+const adminScheduleRoutes = require("./routes/admin/scheduleRoutes");
+const adminMovieTheaterRoutes = require("./routes/admin/movie.theaterRoutes");
+// Api cho user và admin lấy danh sách phim
 app.use("/api/cinema", movieUserRouter);
+
 // app.use("/api/cinema", movieRoutes); 
+// API của Hoàng - SeatBooking -- Hồi định nghĩa nghen
 app.use("/api/showTime", userShowRoutes);
+// API làm việc với Phim và Danh sách các phim (TMDB)
 app.use("/api/admin/movie", adminMovieRoutes);
+// API của Trí làm việc với SHOWTIME -- Lịch chiếu -- Suất chiếu: 
 app.use("/api/admin/shows", adminShowRoutes); 
+// API Của Hiển --- Tạo mới rạp phim;
+app.use("/api/admin/movie_theater", adminMovieTheaterRoutes);
+// API Của Hiển --- Làm việc với Suất chiếu;
+app.use("/api/admin/schedules", adminScheduleRoutes);
 
 const PORT = 5001 || process.env.PORT ;
 

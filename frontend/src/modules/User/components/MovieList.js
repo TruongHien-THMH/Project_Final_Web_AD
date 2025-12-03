@@ -2,7 +2,7 @@
 
 // viết hàm trả về 1 list phim
 import { useState, useEffect } from "react";
-import API from "../../../api/ApiClient";
+import API from "../../../api/User/api.client";
 import MovieCard from "./MovieCard";
 
 export default function MovieList() {

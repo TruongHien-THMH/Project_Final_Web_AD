@@ -9,14 +9,18 @@ const MovieSelectionCard = ({ movie, isSelected, onToggle }) => {
 
   return (
     <div
-      className={`relative w-full rounded-lg overflow-hidden shadow-xl cursor-pointer transition duration-300
-                  ${isSelected ? 'ring-4 ring-rose-600 scale-[1.02]' : 'ring-2 ring-gray-700 hover:ring-rose-500'}`}
+      className={
+        `relative w-full rounded-lg overflow-hidden shadow-xl cursor-pointer transition duration-300
+        ${isSelected ? 'ring-4 ring-rose-600 scale-[1.02]' : 'ring-2 ring-gray-700 hover:ring-rose-500'}`
+      }
       onClick={onToggle}
     >
       {/* Poster và Overlay */}
       <div 
         className="h-80 bg-cover bg-center"
-        style={{ backgroundImage: `url(${posterUrl})` }}
+        style={{ 
+          backgroundImage: `url(${posterUrl})` 
+        }}
       >
         {/* Lớp phủ tối hơn */}
         <div className="absolute inset-0 bg-black bg-opacity-30 flex flex-col justify-end p-4">

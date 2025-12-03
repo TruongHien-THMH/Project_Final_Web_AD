@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import API from '../../../api/ApiClient';
+import API from '../../../api/User/api.client';
 import AdminTable from '../components/AdminTable';
 
 const ListShowsPage = () => {

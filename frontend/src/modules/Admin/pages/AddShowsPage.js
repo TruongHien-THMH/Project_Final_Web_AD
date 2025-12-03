@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MovieSelectionCard from '../components/MovieSelectionCard';
 import axios from 'axios';
-import API from '../../../api/ApiClient';
+import API from '../../../api/User/api.client';
 
 const AddShowsPage = () => {
   const [selectedDateTime, setSelectedDateTime] = useState('2025-06-20 15:30');
@@ -134,7 +134,7 @@ const AddShowsPage = () => {
         <label className="block mb-6">
           <span className="text-gray-300 font-medium">Select Date and Time</span>
           <input
-            type="text"
+            type="datetime-local"
             placeholder="YYYY-MM-DD HH:MM"
             value={selectedDateTime}
             onChange={(e) => setSelectedDateTime(e.target.value)}
