@@ -77,27 +77,23 @@ exports.autoGenerateSchedules = async (req, res) => {
             toDate 
         } = req.body;
 
-        // Validation
         if (!movieIds?.length || !theaterIds?.length || !fromDate || !toDate) {
             return res.status(400).json({ message: "Vui lòng chọn phim, rạp và thời gian!" });
         }
 
-        // Tìm phòng từ danh sách Rạp
         const rooms = await Room.find({ movie_theater_id: { $in: theaterIds } });
         if (rooms.length === 0) {
             return res.status(404).json({ message: "Các rạp đã chọn chưa có phòng chiếu nào!" });
         }
         const realRoomIds = rooms.map(r => r._id);
 
-        // Chuẩn hóa thời gian Check trùng
         const startRange = new Date(fromDate);
         startRange.setHours(0, 0, 0, 0);
         const endRange = new Date(toDate);
         endRange.setHours(23, 59, 59, 999);
 
-        // Kiểm tra trùng lịch
         const existingSchedules = await Schedule.findOne({
-            roomId: { $in: realRoomIds }, // Hãy đảm bảo field này khớp Model (roomId hay room_id)
+            roomId: { $in: realRoomIds },
             time_start: { $gte: startRange, $lte: endRange }
         });
 
@@ -112,43 +108,32 @@ exports.autoGenerateSchedules = async (req, res) => {
 
         const newSchedules = [];
         let currentMovieIndex = 0;
-        
-        // Clone ngày bắt đầu để không làm biến đổi biến gốc
+
         let currentDate = new Date(startRange);
 
-        // ======================================================
-        // VÒNG LẶP CHÍNH (Đã tối ưu)
-        // ======================================================
         while (currentDate <= endRange) {
             
             for (const room of rooms) {
-                // Set Giờ Mở Cửa
+
                 let timeCursor = new Date(currentDate);
                 timeCursor.setHours(CONFIG.OPENING_HOUR, 0, 0, 0);
 
-                // Set Giờ Đóng Cửa
                 let closeTime = new Date(currentDate);
                 closeTime.setHours(CONFIG.CLOSING_HOUR, 0, 0, 0);
 
-                // --- VÒNG LẶP XẾP SUẤT CHIẾU ---
-                // Thay vì while(true), ta dùng điều kiện timeCursor < closeTime cho an toàn
                 while (timeCursor < closeTime) {
                     const movie = movies[currentMovieIndex];
 
                     let runtime = movie.runtime;
                     
-                    // Nếu DB thiếu runtime hoặc runtime không phải số -> Gán mặc định 90 phút
                     if (!runtime || isNaN(runtime)) {
                         console.warn(`⚠️ Cảnh báo: Phim "${movie.title}" (ID: ${movie._id}) thiếu runtime. Dùng mặc định 90 phút.`);
                         runtime = 90; 
                     }
-                    // Tính thời gian kết thúc
-                    // Công thức: Start + (Quảng cáo * 60000) + (Runtime * 60000)
+
                     const totalDurationMs = (CONFIG.ADS_TIME_MIN * 60000) + (runtime * 60000);
                     let endTime = new Date(timeCursor.getTime() + totalDurationMs);
                     
-                    // KIỂM TRA ĐIỀU KIỆN THOÁT:
-                    // Nếu chiếu xong mà lố giờ đóng cửa -> Break ngay lập tức
                     if (endTime > closeTime) {
                         break; 
                     }
@@ -156,26 +141,21 @@ exports.autoGenerateSchedules = async (req, res) => {
                     newSchedules.push({
                         movieId: movie._id,
                         roomId: room._id,
-                        time_start: new Date(timeCursor), // Lưu ý tạo bản sao Date mới
+                        time_start: new Date(timeCursor), 
                         time_end: endTime,
                         booked_seats: [],
                         pending_seats: []
                     });
 
-                    // Cập nhật con trỏ thời gian cho suất sau
-                    // Start Mới = End Cũ + Thời gian dọn dẹp
                     timeCursor = new Date(endTime.getTime() + (CONFIG.CLEAN_TIME_MIN * 60000));
 
-                    // Xoay vòng phim
                     currentMovieIndex = (currentMovieIndex + 1) % movies.length;
                 }
             }
             
-            // Tăng ngày lên 1 (An toàn hơn cách setDate trực tiếp)
             currentDate.setDate(currentDate.getDate() + 1);
         }
 
-        // Insert dữ liệu
         if (newSchedules.length > 0) {
             await Schedule.insertMany(newSchedules);
         }
@@ -186,7 +166,7 @@ exports.autoGenerateSchedules = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Lỗi Auto Generate:", error); // Dùng console.error cho dễ nhìn
+        console.error("Lỗi Auto Generate:", error);
         return res.status(500).json({
             message: "Lỗi Server: " + error.message,
         });
