@@ -4,7 +4,7 @@ import MovieDetail from "../components/MovieDetail";
 import ShowTimeList from "../components/ShowTimeList";
 import NowDisplay from "../components/NowDisplay";
 
-import API from "../../../api/ApiClient";
+import API from "../../../api/User/api.client";
 
 const MoviePage = () => {
 

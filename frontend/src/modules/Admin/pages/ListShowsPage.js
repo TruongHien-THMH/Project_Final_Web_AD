@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // THÊM AXIOS
+import API from '../../../api/User/api.client';
 import AdminTable from '../components/AdminTable';
 
 const ListShowsPage = () => {

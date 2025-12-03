@@ -3,7 +3,7 @@ import React, {useEffect, useState }from 'react';
 import StatsCard from '../components/StatsCard';
 import MovieCard from '../../../ components/ui/MovieCard_user';
 // import MovieCard from '../../Admin/components/MovieCard';
-import API from '../../../api/ApiClient';
+import API from '../../../api/User/api.client';
 
 const AdminDashboardPage = () => {
   // Dữ liệu giả định cho Active Movies

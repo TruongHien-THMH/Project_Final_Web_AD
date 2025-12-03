@@ -139,7 +139,7 @@ exports.fetchGenres = async (req, res) => {
 exports.getNowPlayingMovie = async (req, res) => {
   try {
     // Lấy dữ liệu từ database
-    const movies = await Movie.find();
+    const movies = await Movies.find();
     res.status(200).json(movies);
     
   } catch (err) {
@@ -152,7 +152,7 @@ exports.getNowPlayingMovie = async (req, res) => {
 
 exports.getMovieDetail = async (req, res) => {
   try {
-    const movie = await Movie.findOne({ id: req.params.id });
+    const movie = await Movies.findOne({ id: req.params.id });
     // console.log("Đã lấy được ID: ", movie);
     res.status(200).json(movie);
   } catch (error) {

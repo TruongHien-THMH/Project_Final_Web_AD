@@ -1,36 +1,34 @@
 const mongoose = require('mongoose');
 
 const scheduleSchema = new mongoose.Schema({
-  movieId: 
-    {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'movies',
-        required: true
-    }
-  ,
-  time: {
-    type: String,
+  movieId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Movies',
     required: true
   },
-  data: {
-    type: String,
+  roomId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Room",
     required: true
   },
-  price: {
-    type: Number,
+  time_start: {
+    type: Date,
     required: true
   },
-  cinemaHall: {
-    type: Number,
+  time_end: {
+    type: Date,
     required: true
   },
-  price: {
-    vip: { type: Number, default: 100000 },      
-    standard: { type: Number, default: 65000 }   
-  }
+  booked_seats: [{
+    type: String
+  }],
+  pending_seats:[{  
+    type: String
+  }]
+}, {
+  timestamps: true
 });
 
 const Schedule = mongoose.model('Schedule', scheduleSchema);
-console.log(Schedule.schema.path("movieId").options.ref);
 
 module.exports = Schedule;

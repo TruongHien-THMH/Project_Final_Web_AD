@@ -17,7 +17,7 @@ exports.getMovieDetail = async (req, res) => {
     try {
         const movieId = req.params.id;
 
-        const url = `${process.env.MOVIE_DETAILS_URL}/${movieId}?language=en-US`;
+        const url = `${process.env.API}/${movieId}${process.env.APPEND}`;
         const options = {
             method: 'GET',
             headers: {
@@ -32,7 +32,6 @@ exports.getMovieDetail = async (req, res) => {
         if(!movieDetailTMDB) {
             return res.status(404).json({message: "Không nhận id"})
         }
-
         return res.status(200).json(movieDetailTMDB);
     } catch (error) {
         console.log("Lỗi dịch vụ getMovieDetail: ", error);

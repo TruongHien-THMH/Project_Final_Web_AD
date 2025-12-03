@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MovieSelectionCard from '../components/MovieSelectionCard';
 import axios from 'axios';
+import API from '../../../api/User/api.client';
 
 const AddShowsPage = () => {
   const [selectedDate, setSelectedDate] = useState('');
@@ -171,33 +172,13 @@ const AddShowsPage = () => {
         <label className="block mb-4">
           <span className="text-gray-300 font-medium">Select Date</span>
           <input
-            type="date"
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            min={new Date().toISOString().split('T')[0]}
-            className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:border-rose-500 focus:ring-rose-500"
+            type="text"
+            placeholder="YYYY-MM-DD HH:MM"
+            value={selectedDateTime}
+            onChange={(e) => setSelectedDateTime(e.target.value)}
+            className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white placeholder-gray-400 focus:border-rose-500 focus:ring-rose-500"
           />
-          <span className="text-gray-400 text-sm mt-1">Current: {selectedDate}</span>
-        </label>
-
-        <label className="block mb-6">
-          <span className="text-gray-300 font-medium">Select Time</span>
-          <select
-            value={selectedTime}
-            onChange={(e) => setSelectedTime(e.target.value)}
-            className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:border-rose-500 focus:ring-rose-500"
-          >
-            <option value="09:00">09:00 AM</option>
-            <option value="10:30">10:30 AM</option>
-            <option value="12:00">12:00 PM</option>
-            <option value="14:30">02:30 PM</option>
-            <option value="15:30">03:30 PM</option>
-            <option value="17:00">05:00 PM</option>
-            <option value="19:00">07:00 PM</option>
-            <option value="20:30">08:30 PM</option>
-            <option value="22:00">10:00 PM</option>
-          </select>
-          <span className="text-gray-400 text-sm mt-1">Sending: {selectedTime.replace(' AM', '').replace(' PM', '')}</span>
+          <p className="text-sm text-gray-400 mt-1">Format: YYYY-MM-DD HH:MM (e.g., 2025-06-20 15:30)</p>
         </label>
 
         <div className="mb-4 p-3 bg-gray-700 rounded-lg">
