@@ -1,10 +1,13 @@
 const mongoose = require('mongoose');
 
 const cinemaHallsSchema = new mongoose.Schema({
-    roomCount: Number,
-    locate: String,
+    theater_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "MovieTheater",
+        require: true
+    },
     name: String
 })
 
-const CinemaHall = mongoose.Model("CinemaHall", cinemaHallsSchema)
+const CinemaHall = mongoose.model("CinemaHall", cinemaHallsSchema)
 module.exports = CinemaHall

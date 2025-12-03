@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import API from '../../../api/ApiClient';
+import API from '../../../api/User/api.client';
 import AdminTable from '../components/AdminTable';
 
 const ListShowsPage = () => {
@@ -15,7 +15,8 @@ const ListShowsPage = () => {
     try {
       setLoading(true);
       setError('');
-      const response = await API.get('/admin/shows');
+      // SỬA THÀNH AXIOS TRỰC TIẾP
+      const response = await axios.get('http://localhost:5001/api/admin/shows');
       console.log('Shows data:', response.data);
       
       if (response.data.success) {
@@ -34,8 +35,8 @@ const ListShowsPage = () => {
   const handleDeleteShow = async (showId) => {
     if (window.confirm('Are you sure you want to delete this show?')) {
       try {
-       
-        await API.delete(`/admin/shows/${showId}`);
+        // SỬA THÀNH AXIOS TRỰC TIẾP
+        await axios.delete(`http://localhost:5001/api/admin/shows/${showId}`);
         alert('Show deleted successfully!');
         fetchShows(); 
       } catch (error) {

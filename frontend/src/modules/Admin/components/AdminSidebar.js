@@ -7,6 +7,9 @@ const sidebarLinks = [
   { name: 'Add Shows', path: '/admin/add-shows' },
   { name: 'List Shows', path: '/admin/list-shows' },
   { name: 'List Bookings', path: '/admin/list-bookings' },
+  { name: 'Schedules', path: '/admin/schedules'},
+  { name: 'MovieTheaterPage', path: '/admin/movie_theater'}
+
 ];
 
 const AdminSidebar = () => {

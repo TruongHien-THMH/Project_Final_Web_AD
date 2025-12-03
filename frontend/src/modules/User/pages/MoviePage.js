@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import MovieDetail from "../components/MovieDetail";
 import ShowTimeList from "../components/ShowTimeList";
-import Display from '../components/Display'; 
-import API from "../../../api/ApiClient";
+import NowDisplay from "../components/NowDisplay";
+
+import API from "../../../api/User/api.client";
 
 const MoviePage = () => {
 

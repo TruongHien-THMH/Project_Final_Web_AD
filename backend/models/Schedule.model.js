@@ -6,9 +6,9 @@ const scheduleSchema = new mongoose.Schema({
     ref: 'Movies',
     required: true
   },
-  cinemaHall: {
+  roomId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "cinemaHall",
+    ref: "Room",
     required: true
   },
   time_start: {
@@ -22,7 +22,7 @@ const scheduleSchema = new mongoose.Schema({
   booked_seats: [{
     type: String
   }],
-  pendding_seats:[{  
+  pending_seats:[{  
     type: String
   }]
 }, {

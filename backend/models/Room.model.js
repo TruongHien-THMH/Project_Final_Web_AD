@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 const roomSchema = new mongoose.Schema({
-    cinemaHallId: {
+    movie_theater_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "CinemaHalls",
+        ref: "MovieTheater",
         require: true
     },
     seatRow: {
-        type: String
+        type: Number
     },
     seatCol: {
         type: Number
@@ -15,6 +15,6 @@ const roomSchema = new mongoose.Schema({
     timestamps: true
 })
 
-const Room = mongoose.Model("Room", roomSchema);
+const Room = mongoose.model("Room", roomSchema);
 
 module.exports = Room;
