@@ -5,7 +5,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css"; 
 
 // Import các component con
-import API from "../../../api/ApiClient";
+import API from "../../../api/User/api.client";
 import MovieCard from "./MovieCard";
 import BlurCircle from "./BlurCircle"; 
 

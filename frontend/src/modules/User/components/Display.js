@@ -1,7 +1,7 @@
 import BlurCircle from "./BlurCircle";
 import { useNavigate } from 'react-router-dom'; // 1. Import hook
 
-const NowDisplay = () => {
+const Display = () => {
   const navigate = useNavigate(); // 2. Khởi tạo hàm navigate
 
   return (
@@ -129,4 +129,4 @@ const NowDisplay = () => {
   );
 };
 
-export default NowDisplay;
+export default Display;
