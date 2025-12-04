@@ -172,3 +172,37 @@ exports.autoGenerateSchedules = async (req, res) => {
         });
     }
 };
+
+exports.getSchedule = async (req, res) => {
+    try {
+
+        const {id} = req.params.id;
+        const  movie = await Movie.findOne({ id: id });
+
+        if( !movie ) {
+            return res.status(400).json({message: "Không tìm thấy phim này !!!"});
+        } 
+        
+        const schedules = await Schedule.find({ movieId: movie._id })
+                                        .populate('roomId')
+                                        .sort({ time_start: 1 });
+
+        if(schedules.length === 0) {
+            return res.status(200).json({
+                message: "Phim chưa có suất chiếu !!!",
+                data: []
+            })
+        }
+
+        return res.status(200).json({
+            message: "Lấy dữ liệu thành công !!!",
+            data: schedules
+        })
+    } catch (error) {
+        console.log("Lỗi khi lấy lịch của 1 phim: getSchedule(), ", error);
+        return res.status(500).json({
+            message: "Lỗi BackEnd!!!",
+            error: error.message
+        })
+    }
+}
