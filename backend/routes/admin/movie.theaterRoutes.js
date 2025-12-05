@@ -5,4 +5,8 @@ const movie_theaterCtl = require("../../controllers/Admin/movie.theater_admin_co
 router.get('/', movie_theaterCtl.getTheaters);
 router.post('/create_theater',movie_theaterCtl.createTheater);
 
+router.put('/edit/:id', movie_theaterCtl.edit);
+
+router.delete('/delete/:id', movie_theaterCtl.delete);
+
 module.exports = router
