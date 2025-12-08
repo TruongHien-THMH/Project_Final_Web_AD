@@ -26,26 +26,9 @@ const MovieDetail = ({ movie }) => {
     poster_path: movie.poster_path
   };
 
-  const cast = [
-    { id: 1, name: "Chris Pratt", role: "Peter Quill" },
-    { id: 2, name: "Zoe Saldaña", role: "Gamora" },
-    { id: 3, name: "Dave Bautista", role: "Drax" },
-    { id: 4, name: "Vin Diesel", role: "Groot" },
-    { id: 5, name: "Bradley Cooper", role: "Rocket" },
-    { id: 6, name: "Karen Gillan", role: "Nebula" },
-    { id: 7, name: "Lee Pace", role: "Ronan" },
-  ];
-
-  const getAvatarColor = (id) => {
-    const colors = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-purple-500", "bg-yellow-500", "bg-pink-500"];
-    return colors[id % colors.length];
-  };
-
   return (
     <section className="w-full bg-[#0d0d0d] text-white py-16 px-6 md:px-20">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-10">
-
-        {/* LEFT POSTER - SỬA ĐỂ HIỂN THỊ ẢNH THẬT */}
         <div className="w-full md:w-1/3">
           {movieData.poster_path ? (
             <img 
@@ -95,22 +78,39 @@ const MovieDetail = ({ movie }) => {
         </div>
       </div>
 
-      {/* CAST SECTION */}
       <div className="max-w-6xl mx-auto mt-14">
         <h2 className="text-xl font-semibold mb-6">Cast</h2>
 
-        <div className="flex gap-8 overflow-x-auto pb-4">
-          {cast.map((actor) => (
-            <div key={actor.id} className="flex flex-col items-center min-w-[80px]">
-              <div
-                className={`w-20 h-20 rounded-full ${getAvatarColor(
-                  actor.id
-                )} flex items-center justify-center text-2xl font-bold text-white`}
-              >
-                {actor.name[0]}
+        <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar fade-edge">
+          {movie.credits.cast.slice(0, 15).map((actor) => (
+            <div 
+              key={actor.cast_id} 
+              className="flex-shrink-0 w-[140px] group cursor-pointer" 
+            >
+              <div className="w-[140px] h-[175px] rounded-xl overflow-hidden mb-3 shadow-lg relative bg-gray-800">
+                {actor.profile_path ? (
+                  <img
+                    src={`${process.env.REACT_APP_IMAGES || "https://image.tmdb.org/t/p/w200"}${actor.profile_path}`}
+                    alt={actor.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out"
+                    loading="lazy"
+                  />
+                ) : (
+                  
+                  <div className="w-full h-full flex items-center justify-center bg-gray-700 text-gray-500 font-bold text-3xl">
+                    {actor.name.charAt(0)}
+                  </div>
+                )}
               </div>
-              <p className="mt-3 text-sm font-semibold text-center">{actor.name}</p>
-              <p className="text-xs text-gray-400 text-center">{actor.role}</p>
+
+              <div className="px-1">
+                <h3 className="text-white font-semibold text-sm truncate group-hover:text-rose-500 transition-colors">
+                    {actor.name || actor.original_name}
+                </h3>
+                <p className="text-xs text-gray-400 truncate">
+                    {actor.character}
+                </p>
+              </div>
             </div>
           ))}
         </div>

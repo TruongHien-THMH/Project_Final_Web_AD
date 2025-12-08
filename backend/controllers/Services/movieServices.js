@@ -1,4 +1,3 @@
-// Code chứa các controller chung về movie:
 const Movies =  require('../../models/Movies');
 const Genres = require("../../models/Genres");
 
