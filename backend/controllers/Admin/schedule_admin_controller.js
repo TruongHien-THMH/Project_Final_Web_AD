@@ -1,7 +1,7 @@
 const Schedule = require("../../models/Schedule.model");
 const Movie = require("../../models/Movies");
 const Room = require("../../models/Room.model");
-const mongoose = require("mongoose");
+
 
 const CONFIG = {
     OPENING_HOUR: 7,   // 7 giờ sáng
@@ -176,15 +176,25 @@ exports.autoGenerateSchedules = async (req, res) => {
 exports.getSchedule = async (req, res) => {
     try {
 
-        const {id} = req.params.id;
+        const {id} = req.params;
+
         const  movie = await Movie.findOne({ id: id });
 
         if( !movie ) {
-            return res.status(400).json({message: "Không tìm thấy phim này !!!"});
+            return res.status(400).json({
+                message: "Không tìm thấy phim này !!!",
+                // data: `Dữ liệu nhận được: ${movie}`
+            });
         } 
         
         const schedules = await Schedule.find({ movieId: movie._id })
-                                        .populate('roomId')
+                                        .populate({
+                                            path: 'roomId',
+                                            populate: {
+                                                path: 'movie_theater_id',
+                                                model: 'MovieTheater'
+                                            }
+                                        })
                                         .sort({ time_start: 1 });
 
         if(schedules.length === 0) {
