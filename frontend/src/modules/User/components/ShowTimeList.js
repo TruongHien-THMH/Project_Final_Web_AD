@@ -1,73 +1,29 @@
 import React, { useState, useEffect, useMemo } from "react";
 
-const dates = [
-  { label: "Tue", day: 15 },
-  { label: "Wed", day: 16 },
-  { label: "Thu", day: 17 },
-  { label: "Fri", day: 18 },
-  { label: "Sat", day: 19 },
-  { label: "Sun", day: 20 },
-];
+import { useNavigate } from "react-router-dom";
 
-const theaters = [
-  {
-    id: 1,
-    name: "Thearter 1",
-    address: "Thearter 1 Nguyễn Hữu Thọ",
-    avatar: "https://i.pravatar.cc/150?img=12",
-    times: ["9:30 AM", "11:00 AM", "15:20 PM", "21:40 PM", "22:00 PM"],
-  },
-  {
-    id: 2,
-    name: "Thearter 2",
-    address: "Thearter 2 Nguyễn Văn Linh",
-    avatar: "https://i.pravatar.cc/150?img=5",
-    times: ["9:30 AM", "11:00 AM", "15:20 PM", "21:40 PM", "22:00 PM"],
-  },
-];
+const ShowtimeList = ({ movieId, movie, data = [] }) => {
+  const navigate = useNavigate()
 
-
-const ShowtimeList = ({ data = [] }) => {
   const [selectedDate, setSelectedDate] = useState('');
 
   const [selectedTimeId, setSelectedTimeId] = useState(null);
 
-  const [selectedTimes, setSelectedTimes] = useState({}); // { theaterId: "11:00 AM" }
+  const [selectedSchedule, setSelectedSchedule] = useState(null);
 
   const schedulesByDate = useMemo(() => {
     const grouped = {}; 
-
-    data.forEach ( (schedule) => {
-      if( !schedule.time_start) return;
-
-      const dateKey = new Date(schedule.time_start).toISOString().split('T')[0]; // Str
-      // Tạo 1 Mảng mới với Giá trị duy nhất sẽ là phần tử thứ 0 khi kí tự này bị thành 1 mảng bởi Hàm Split
-      /**
-       * ví dụ: 
-       * const ArrStr = [
-            "Hello world",
-            "Xin chào",
-            "Ni Hào"
-        ];
-
-        ArrStr.forEach((world) => (
-            console.log(world.split(' ')[1])
-        ))
-          output là: world - chào - Hào.
-       * 
-       */
-      // Kiểm tra key đã có giá trị chưa
-      if (!grouped[dateKey]) { // Nếu chưa, gán trí mảng rỗng tại key đó !!!
+    data.forEach((schedule) => {
+      if (!schedule.time_start) return;
+      const dateKey = new Date(schedule.time_start).toISOString().split('T')[0];
+      if (!grouped[dateKey]) { 
         grouped[dateKey] = []; 
       }
-      // Đẩy các giá trị vào mảng của Key.
       grouped[dateKey].push(schedule);
-    } )
-
+    });
     return grouped;
-  }, [data]) // Hàm này sẽ chạy khi data thay đổi.
-  
-  // Lấy Obj các ngày thành mảng.
+  }, [data]); // Hàm này sẽ chạy khi data thay đổi.
+
   const availableDates = Object.keys(schedulesByDate).sort(); 
 
   useEffect(() => {
@@ -76,29 +32,28 @@ const ShowtimeList = ({ data = [] }) => {
     }
   }, [availableDates, selectedDate])
 
-  const theatersForDate = useMemo ( () => {
-    // Nếu ngày đó không có ngày hoặc chưa có lịch thì trả về rỗng.
+  const theatersForDate = useMemo(() => {
     if (!selectedDate || !schedulesByDate[selectedDate]) return [];
 
     const currentSchedules = schedulesByDate[selectedDate];
     const theatersMap = new Map();
 
     currentSchedules.forEach((schedule) => {
-      // Check trong BE đã Xử lý populate -- Link Model chưa
+      // Check data structure from Backend
       const room = schedule.roomId || {};
       const theater = room.movie_theater_id || {};    
       
       const theaterId = theater._id || "unknown_id";
       const theaterName = theater.name || "Unknown Theater"; 
-      const theaterAddress = theater.address || "Đang cập nhật địa chỉ";
+      const theaterAddress = theater.address || "Address updating...";
 
       if (!theatersMap.has(theaterId)) {
         theatersMap.set(theaterId, {
           id: theaterId,
           name: theaterName,
           address: theaterAddress,
-          avatar: "https://ui-avatars.com/api/?name=" + theaterName, // Tạo avatar chữ cái đầu
-          showtimes: [] // Mảng chứa các giờ chiếu
+          avatar: "https://ui-avatars.com/api/?name=" + theaterName,
+          showtimes: [] 
         });
       }
 
@@ -106,16 +61,17 @@ const ShowtimeList = ({ data = [] }) => {
       const timeString = timeDate.toLocaleTimeString('en-US', { 
           hour: '2-digit', minute: '2-digit', hour12: true 
       });
-
+      
       theatersMap.get(theaterId).showtimes.push({
-        id: schedule._id,
-        time: timeString
+        id: schedule._id, 
+        time: timeString,
+        fullDate: schedule.time_start,
+        roomId: room 
       });
-    })
+    });
 
     return Array.from(theatersMap.values());
-
-  }, [selectedDate, schedulesByDate] );
+  }, [selectedDate, schedulesByDate]);
 
   const formatDateLabel = (dateString) => {
     const date = new Date(dateString);
@@ -123,19 +79,49 @@ const ShowtimeList = ({ data = [] }) => {
     const dayNum = date.getDate(); // 15, 16
     return { dayName, dayNum };
   };
-  const handleSelectTime = (theaterId, time) => {
-    setSelectedTimes((prev) => ({
-      ...prev,
-      [theaterId]: time,
-    }));
+
+  const handleBookTicket = () => {
+    if (!selectedSchedule) return;
+    // Chuyển hướng sang trang chọn ghế (Giả sử đường dẫn là /booking/:scheduleId)
+    // Đồng thời gửi kèm dữ liệu qua 'state' để trang kia không cần fetch lại
+    navigate(`/booking/${selectedSchedule.id}`, { // Check lại có nhận đươc ID không nếu lỗi.
+      state: {
+        movieInfo: {
+            id: movieId,
+            title: movie?.title,
+            poster: movie?.poster_path
+        },
+        scheduleInfo: {
+            id: selectedSchedule.id,
+            date: selectedDate,
+            time: selectedSchedule.time,
+            theaterName: selectedSchedule.theaterName,
+            theaterAddress: selectedSchedule.theaterAddress,
+            roomId: selectedSchedule.roomId 
+        }
+      }
+    });
   };
 
   return (
     <section className="bg-[#0d0d0d] text-white px-6 py-10 md:px-20 w-full">
 
-      {/* TIÊU ĐỀ NGÀY */}
-      <div className="bg-gradient-to-br from-[#4a0a15] to-[#2d0a10] p-6 rounded-xl mb-10 flex justify-between items-center">
+      {/* --- HEADER DATE SELECTOR --- */}
+      <div className="bg-gradient-to-br from-[#4a0a15] to-[#2d0a10] p-6 rounded-xl mb-10 flex flex-col md:flex-row justify-between items-center gap-4 sticky top-0 z-10 shadow-xl">
         <h2 className="text-xl font-semibold">Choose Date</h2>
+        
+        {/* NÚT BOOK NOW (SÁNG LÊN KHI CHỌN GIỜ) */}
+        <button 
+          onClick={handleBookTicket}
+          disabled={!selectedSchedule} // Disable nếu chưa chọn giờ
+          className={`px-8 py-3 rounded-full font-bold transition-all duration-300 transform
+            ${selectedSchedule 
+              ? "bg-[#ff5874] text-white shadow-lg shadow-rose-600/50 scale-105 hover:scale-110 cursor-pointer" 
+              : "bg-gray-700 text-gray-400 cursor-not-allowed opacity-50"
+            }`}
+        >
+          {selectedSchedule ? "Book Now 🎟" : "Select a time"}
+        </button>
       </div>
 
       {/* DANH SÁCH NGÀY (Thanh cuộn ngang) */}
@@ -185,15 +171,22 @@ const ShowtimeList = ({ data = [] }) => {
                 </div>
             </div>
 
-            {/* Danh sách giờ chiếu */}
-            <div className="flex gap-4 flex-wrap">
+            {/* DANH SÁCH GIỜ CHIẾU */}
+            <div className="flex gap-4 flex-wrap mt-5">
               {t.showtimes.map((show) => (
                 <button
                   key={show.id}
-                  onClick={() => setSelectedTimeId(show.id)}
+                  onClick={() => {
+                    // Lưu lại thông tin suất chiếu đang chọn + Thông tin rạp kèm theo
+                    setSelectedSchedule({
+                        ...show, 
+                        theaterName: t.name,
+                        theaterAddress: t.address
+                    });
+                  }}
                   className={`px-6 py-3 rounded-lg border text-sm transition font-medium
                   ${
-                    selectedTimeId === show.id
+                    selectedSchedule?.id === show.id
                       ? "bg-[#ff5874] text-white border-transparent shadow-lg shadow-rose-900/50 scale-105"
                       : "border-[#ff587480] text-gray-300 hover:bg-[#ff587430]"
                   }`}
@@ -204,10 +197,6 @@ const ShowtimeList = ({ data = [] }) => {
             </div>
           </div>
         ))}
-
-        {theatersForDate.length === 0 && selectedDate && (
-            <p className="text-center text-gray-500 mt-10">No showtimes for this date.</p>
-        )}
       </div>
     </section>
   );

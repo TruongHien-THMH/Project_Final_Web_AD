@@ -210,9 +210,29 @@ exports.getSchedule = async (req, res) => {
         })
     } catch (error) {
         console.log("Lỗi khi lấy lịch của 1 phim: getSchedule(), ", error);
-        return res.status(500).json({
+        return res.status(400).json({
             message: "Lỗi BackEnd!!!",
             error: error.message
         })
     }
 }
+
+exports.showSeatBooked = async (req, res) => {
+    try {
+        const scheduleId = req.params.id;
+        
+        const resSchedule = await Schedule.findById(scheduleId).populate('roomId');
+        const scheduleInfo = resSchedule.roomId;
+
+        return res.status(200).json({
+            message : 'Lấy dữ liệu thành công !!!',
+            data: scheduleInfo
+        })
+    } catch (error) {
+        console.log('Lỗi BackEnd Hàm lấy ghế đã đặt (getSeatBooked)');
+        return res.status(400).json({
+            message: "Lỗi BackEnd!!!",
+            error: error.message
+        })
+    }
+};
