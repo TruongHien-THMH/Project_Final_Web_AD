@@ -174,8 +174,8 @@ const AddShowsPage = () => {
           <input
             type="text"
             placeholder="YYYY-MM-DD HH:MM"
-            value={selectedDateTime}
-            onChange={(e) => setSelectedDateTime(e.target.value)}
+           
+            // onChange={(e) => setSelectedDateTime(e.target.value)}
             className="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white placeholder-gray-400 focus:border-rose-500 focus:ring-rose-500"
           />
           <p className="text-sm text-gray-400 mt-1">Format: YYYY-MM-DD HH:MM (e.g., 2025-06-20 15:30)</p>

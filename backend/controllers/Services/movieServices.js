@@ -15,7 +15,6 @@ exports.getMovieList = async (req, res) => {
 exports.getMovieDetail = async (req, res) => {
     try {
         const movieId = req.params.id;
-
         const url = `${process.env.API}/${movieId}${process.env.APPEND}`;
         const options = {
             method: 'GET',
@@ -24,8 +23,12 @@ exports.getMovieDetail = async (req, res) => {
                 Authorization: `Bearer ${process.env.ACCESS_TOKEN}`
             }
         };
+
         const movieTMDBRespone = await fetch(url, options);
+
         const movieDetailTMDB = await movieTMDBRespone.json();
+
+        // console.log('Data hiện tại: ', movieDetailTMDB);
 
         // const movieDetail = await Movies.findById( movieId );
         if(!movieDetailTMDB) {

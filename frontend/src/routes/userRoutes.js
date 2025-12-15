@@ -11,8 +11,7 @@ export const userRouter = (
     <Route path="/" element={<UserLayout/>}>
         <Route index element={<HomePage/>} />
         <Route path="movie/:id" element={<MoviePage/>}/>
-        <Route path="booking" element={<SeatBookingPage />} />
-        <Route path="/movie/:id/date" element={<SeatBookingPage />} />
+        <Route path="booking/:scheduleId" element={<SeatBookingPage />} />
         <Route path="*" element={<NotFoundPage/>}/>
     </Route>
 )

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import API from '../../../api/User/api.client';
+// import API from '../../../api/User/api.client';
 import AdminTable from '../components/AdminTable';
-
+import API_ADMIN_SHOWS from '../../../api/Admin/api.admin.shows';
 const ListShowsPage = () => {
   const [shows, setShows] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,7 +16,7 @@ const ListShowsPage = () => {
       setLoading(true);
       setError('');
       // SỬA THÀNH AXIOS TRỰC TIẾP
-      const response = await axios.get('http://localhost:5001/api/admin/shows');
+      const response = await API_ADMIN_SHOWS.get('/');
       console.log('Shows data:', response.data);
       
       if (response.data.success) {
@@ -36,7 +36,7 @@ const ListShowsPage = () => {
     if (window.confirm('Are you sure you want to delete this show?')) {
       try {
         // SỬA THÀNH AXIOS TRỰC TIẾP
-        await axios.delete(`http://localhost:5001/api/admin/shows/${showId}`);
+        await API_ADMIN_SHOWS.delete(`${showId}`);
         alert('Show deleted successfully!');
         fetchShows(); 
       } catch (error) {
