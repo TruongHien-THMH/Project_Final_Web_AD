@@ -16,5 +16,6 @@ export const adminRouter = (
     <Route path="list-bookings" element={<ListBookingsPage />} />
     <Route path="schedules" element={<SchedulePage/>}/>
     <Route path="movie_theater" element={<MovieTheaterPage/>}/>
+    {/* Thêm 1 Route show vé */}
   </Route>
 );
