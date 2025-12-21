@@ -5,12 +5,14 @@ import BlurCircle from '../components/BlurCircle';
 import API_ADMIN_SCHEDULES from '../../../api/Admin/api.admin.schedule';
 import API_BOOK from '../../../api/User/api.book';
 
+import { useAuth } from '../../../context/AuthContext';
+
 // Định nghĩa trạng thái ghế rõ ràng
 const SEAT_STATUS = {
   AVAILABLE: 'available',
   SELECTED: 'selected',
   BOOKED: 'booked',
-  PENDING: 'pending' // Thêm trạng thái này để hiển thị ghế đang được người khác giữ
+  PENDING: 'pending' 
 };
 
 const SeatBookingPage = () => {
@@ -31,6 +33,18 @@ const SeatBookingPage = () => {
   const [createdTicket, setCreatedTicket] = useState(null);
   const [countdown, setCountdown] = useState(0);
 
+  const [email, setEmail] = useState('');
+
+  // Lấy User từ Context
+  const { user, openAuthModal, showToast } = useAuth();
+
+  // --- FIX LOGIC 1: TỰ ĐỘNG ĐIỀN EMAIL KHI CÓ USER ---
+  useEffect(() => {
+    if (user && user.email) {
+        setEmail(user.email);
+    }
+  }, [user]);
+
   // 1. FETCH DỮ LIỆU
   useEffect(() => {
     if (!scheduleId) return;
@@ -39,8 +53,7 @@ const SeatBookingPage = () => {
         setLoading(true);
         const res = await API_ADMIN_SCHEDULES.get(`/seatbooking/${scheduleId}`);
         const data = res.data.data;
-        console.log('Check data: ', data);
-
+        
         setBookedSeats(data.booked_seats || []);
         setPendingSeats(data.pending_seats || []); 
         
@@ -80,8 +93,13 @@ const SeatBookingPage = () => {
 
   // 3. XỬ LÝ CHỌN GHẾ
   const handleSeatClick = (seatLabel) => {
-    // Không cho chọn ghế đã đặt hoặc đang pending
     if (bookedSeats.includes(seatLabel) || pendingSeats.includes(seatLabel)) return;
+
+    if (!user) {
+        showToast("Vui lòng đăng nhập để chọn ghế!", "error");
+        openAuthModal();
+        return;
+    }
 
     if (selectedSeats.includes(seatLabel)) {
       setSelectedSeats(prev => prev.filter(s => s !== seatLabel));
@@ -96,6 +114,12 @@ const SeatBookingPage = () => {
 
   // 4. API TẠO VÉ (SỬA LẠI ĐỂ TẮT MODAL)
   const handleCreateTicket = async () => {
+    // Validate Email trước khi tạo vé
+    if (!email) {
+        alert("Vui lòng nhập email nhận vé!");
+        return;
+    }
+
     try {
         const res = await API_BOOK.post('/create', {
             scheduleId,
@@ -107,10 +131,10 @@ const SeatBookingPage = () => {
         setCreatedTicket(res.data.data.ticket);
         setCountdown(res.data.data.expireInSeconds); 
         
-        // --- SỬA YÊU CẦU 1: TẮT MODAL SAU KHI CONFIRM ---
-        setShowPaymentModal(false); 
-
-        alert(`Đã giữ vé thành công! Vui lòng thanh toán trong thời gian quy định.`);
+        setShowPaymentModal(false); // Tắt modal chọn phương thức
+        
+        // Thông báo nhẹ nhàng hơn alert
+        showToast(`Giữ vé thành công! Vui lòng thanh toán trong ${Math.floor(res.data.data.expireInSeconds/60)} phút.`, "success");
         
     } catch (error) {
         alert("Lỗi đặt vé: " + (error.response?.data?.message || error.message));
@@ -119,18 +143,24 @@ const SeatBookingPage = () => {
     }
   }
 
+  // 5. XÁC NHẬN THANH TOÁN & GỬI EMAIL
   const handleConfirmPayment = async () => {
-      if(!createdTicket) return;
-      try {
-          await API_BOOK.post('/confirm', { ticketId: createdTicket._id });
-          alert("Thanh toán thành công! Vé đã được xuất.");
-          navigate('/'); 
-      } catch (error) {
-          alert("Lỗi xác nhận: " + error.message);
-      }
-  }
+    if(!createdTicket) return;
+    try {
+        // Gửi kèm email state (đã được auto-fill hoặc user sửa)
+        await API_BOOK.post('/confirm', { 
+            ticketId: createdTicket._id,
+            email: email 
+        });
 
-  // 5. RENDER LƯỚI GHẾ (SỬA YÊU CẦU 2: MÀU SẮC RÕ RÀNG)
+        alert(`Thanh toán thành công! Vé đã được gửi về email: ${email}`);
+        navigate('/'); 
+    } catch (error) {
+        alert("Lỗi xác nhận: " + (error.response?.data?.message || error.message));
+    }
+}
+
+  // 6. RENDER LƯỚI GHẾ (ĐÃ CHỈNH SỬA MÀU SẮC TƯƠNG PHẢN CAO)
   const renderSeatGrid = () => {
     if (!roomLayout) return null;
     const { totalRows, totalCols } = roomLayout;
@@ -154,16 +184,16 @@ const SeatBookingPage = () => {
         
         switch (status) {
             case SEAT_STATUS.BOOKED:
-                seatClasses += "bg-white-900 opacity-40 text-transparent cursor-not-allowed border border-transparent";                
+                seatClasses += "bg-gray-900 border border-gray-800 opacity-30 text-transparent cursor-not-allowed";                
                 break;
             case SEAT_STATUS.PENDING:
-                seatClasses += "bg-yellow-900/40 text-yellow-600 cursor-not-allowed border border-yellow-800/50"; // Màu vàng tối cho ghế đang giữ
+                seatClasses += "bg-yellow-600 text-black border border-yellow-500 cursor-not-allowed shadow-[0_0_10px_rgba(234,179,8,0.4)]"; 
                 break;
             case SEAT_STATUS.SELECTED:
-                seatClasses += "bg-rose-600 text-white shadow-[0_0_15px_rgba(225,29,72,0.6)] scale-110 z-10 border border-rose-500"; // Nổi bật nhất
+                seatClasses += "bg-rose-600 text-white shadow-[0_0_15px_rgba(225,29,72,0.8)] scale-110 z-10 border border-rose-400"; 
                 break;
             default: // AVAILABLE
-                seatClasses += "bg-gray-800 border border-gray-600 text-gray-400 hover:bg-rose-600/30 hover:border-rose-500 hover:text-white";
+                seatClasses += "bg-gray-700 border border-gray-500 text-gray-300 hover:bg-white hover:text-black hover:shadow-white/50";
         }
 
         rowSeats.push(
@@ -171,14 +201,19 @@ const SeatBookingPage = () => {
             key={seatLabel}
             onClick={() => handleSeatClick(seatLabel)}
             className={seatClasses}
-            title={status === SEAT_STATUS.PENDING ? "Seat is being held" : seatLabel}
+            title={status === SEAT_STATUS.PENDING ? "Ghế đang được giữ" : seatLabel}
           >
-            {/* Chỉ hiện số ghế khi Available hoặc Selected để đỡ rối mắt */}
-            {status === SEAT_STATUS.SELECTED || status === SEAT_STATUS.AVAILABLE ? c : ""}
+            {status !== SEAT_STATUS.BOOKED ? c : ""}
           </div>
         );
       }
-      grid.push(<div key={r} className="flex justify-center mb-2"><span className="w-6 text-right mr-4 text-gray-500 font-mono">{rowLabel}</span>{rowSeats}<span className="w-6 ml-4 text-gray-500 font-mono">{rowLabel}</span></div>);
+      grid.push(
+          <div key={r} className="flex justify-center mb-2">
+              <span className="w-6 text-right mr-4 text-gray-400 font-mono font-bold pt-1">{rowLabel}</span>
+              {rowSeats}
+              <span className="w-6 ml-4 text-gray-400 font-mono font-bold pt-1">{rowLabel}</span>
+          </div>
+      );
     }
     return grid;
   };
@@ -204,22 +239,22 @@ const SeatBookingPage = () => {
             </div>
 
             {/* CHÚ THÍCH MÀU SẮC */}
-            <div className="flex gap-6 mt-4 flex-wrap justify-center">
+            <div className="flex gap-6 mt-8 flex-wrap justify-center bg-gray-900/50 p-4 rounded-xl border border-gray-800">
                 <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 bg-gray-800 border border-gray-600 rounded"></div>
-                    <span className="text-sm text-gray-400">Available</span>
+                    <div className="w-6 h-6 bg-gray-700 border border-gray-500 rounded-t-lg"></div>
+                    <span className="text-sm text-gray-300">Trống</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 bg-rose-600 rounded shadow-[0_0_10px_rgba(225,29,72,0.6)]"></div>
-                    <span className="text-sm text-white font-bold">Your Selection</span>
+                    <div className="w-6 h-6 bg-rose-600 border border-rose-400 rounded-t-lg shadow-[0_0_10px_rgba(225,29,72,0.8)]"></div>
+                    <span className="text-sm text-white font-bold">Đang chọn</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 bg-gray-800 border border-gray-700 rounded"></div>
-                    <span className="text-sm text-gray-500">Booked</span>
+                    <div className="w-6 h-6 bg-gray-900 border border-gray-800 opacity-30 rounded-t-lg"></div>
+                    <span className="text-sm text-gray-500">Đã bán</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 bg-yellow-900/40 border border-yellow-800/50 rounded"></div>
-                    <span className="text-sm text-yellow-600">Pending (Held)</span>
+                    <div className="w-6 h-6 bg-yellow-600 border border-yellow-500 rounded-t-lg"></div>
+                    <span className="text-sm text-yellow-500">Đang giữ</span>
                 </div>
             </div>
         </div>
@@ -250,7 +285,7 @@ const SeatBookingPage = () => {
                     Checkout
                 </button>
             ) : (
-                // TRẠNG THÁI: ĐANG CHỜ THANH TOÁN (SAU KHI ĐÓNG MODAL)
+                // TRẠNG THÁI: ĐANG CHỜ THANH TOÁN
                 <div className="mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <div className="bg-rose-500/10 border border-rose-500/50 rounded-xl p-4 text-center">
                         <p className="text-sm text-rose-400 mb-2 font-semibold uppercase tracking-wider">Payment Countdown</p>
@@ -313,6 +348,18 @@ const SeatBookingPage = () => {
                             <p className="text-xs text-gray-400">Pay 1 hour before showtime</p>
                         </div>
                     </label>
+
+                    <div className="mt-4">
+                        <label className="text-sm text-gray-400 mb-1 block">Email của bạn:</label>
+                        <input 
+                            type="email" 
+                            className="w-full bg-gray-800 border border-gray-600 rounded-lg p-3 text-white focus:border-rose-500 outline-none"
+                            value={email} // Tự động điền từ state
+                            onChange={(e) => setEmail(e.target.value)}
+                            disabled
+                        />
+                        <p className="text-xs text-gray-500 mt-1">*Email bạn sẽ nhận vé</p>
+                    </div>
                 </div>
 
                 <div className="flex gap-4 mt-8">

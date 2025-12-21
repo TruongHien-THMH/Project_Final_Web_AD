@@ -13,11 +13,14 @@ app.use(express.urlencoded({ extended: true }));
 const movieUserRouter = require("./routes/users/movie_user_route");
 const userShowRoutes = require("./routes/userShowRoutes");
 const userBookRoutes = require("./routes/users/book.user.route");
+const authUserRouter = require("./routes/users/auth.routes");
 
 const adminShowRoutes = require("./routes/showRoutes");
 const adminMovieRoutes = require("./routes/admin/movieRoutes");
 const adminScheduleRoutes = require("./routes/admin/scheduleRoutes");
 const adminMovieTheaterRoutes = require("./routes/admin/movie.theaterRoutes");
+app.use("/api/auth", authUserRouter);
+
 // Api cho user và admin lấy danh sách phim
 app.use("/api/cinema", movieUserRouter);
 // API làm việc với đặt vé: 
