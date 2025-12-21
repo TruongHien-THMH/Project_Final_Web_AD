@@ -222,11 +222,9 @@ exports.showSeatBooked = async (req, res) => {
         const scheduleId = req.params.id;
         
         const resSchedule = await Schedule.findById(scheduleId).populate('roomId');
-        const scheduleInfo = resSchedule.roomId;
-
         return res.status(200).json({
             message : 'Lấy dữ liệu thành công !!!',
-            data: scheduleInfo
+            data: resSchedule
         })
     } catch (error) {
         console.log('Lỗi BackEnd Hàm lấy ghế đã đặt (getSeatBooked)');
