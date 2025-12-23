@@ -7,8 +7,9 @@ const ticketSchema = new mongoose.Schema({
     required: true
   },
   userId: {
-    type: String, // Tạm thời để String vì chưa có Model User
-    default: "guest_user" 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: "User",                          
+    required: true
   },
   seatNames: [{
     type: String,

@@ -2,10 +2,15 @@ import React, { useState, useEffect } from 'react';
 // import API from '../../../api/User/api.client';
 import AdminTable from '../components/AdminTable';
 import API_ADMIN_SHOWS from '../../../api/Admin/api.admin.shows';
+
+import MaintenancePage from '../components/MaintenancePage';
+
 const ListShowsPage = () => {
   const [shows, setShows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  const [isMaintenance, setIsMaintenance] = useState(true);
 
   useEffect(() => {
     fetchShows();
@@ -71,6 +76,10 @@ const ListShowsPage = () => {
         <div className="text-gray-300">Loading shows...</div>
       </div>
     );
+  }
+
+  if (isMaintenance) {
+      return <MaintenancePage pageName="List Shows" />;
   }
 
   return (

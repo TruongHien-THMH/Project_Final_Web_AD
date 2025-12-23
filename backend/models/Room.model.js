@@ -3,7 +3,11 @@ const roomSchema = new mongoose.Schema({
     movie_theater_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "MovieTheater",
-        require: true
+        required: true
+    },
+    name: {
+        type: String, // Thêm trường này
+        default: "Phòng chiếu"
     },
     seatRow: {
         type: Number

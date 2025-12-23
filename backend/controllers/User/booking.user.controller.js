@@ -7,6 +7,11 @@ exports.createBooking = async (req, res) => {
     try {
         const { scheduleId, seatNames, totalPrice, paymentMethod } = req.body;
 
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ message: "Vui lòng đăng nhập để đặt vé!" });
+        }
+        const userId = req.user.id;
+
         // 1. Kiểm tra lịch chiếu
         const schedule = await Schedule.findById(scheduleId);
         if (!schedule) return res.status(404).json({ message: "Lịch chiếu không tồn tại" });
@@ -41,6 +46,7 @@ exports.createBooking = async (req, res) => {
         // 5. Tạo Ticket
         const newTicket = await Ticket.create({
             scheduleId,
+            userId: userId,
             seatNames,
             totalPrice,
             paymentMethod,

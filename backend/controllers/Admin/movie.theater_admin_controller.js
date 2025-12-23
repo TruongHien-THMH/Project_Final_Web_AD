@@ -68,6 +68,51 @@ exports.getTheaters = async (req, res) => {
     }
 }
 
+exports.getRooms = async (req, res) => {
+    try {
+        // Nhận theaterId từ query params (VD: /rooms?theaterId=123)
+        const { theaterId } = req.query;
+        
+        let query = {};
+        if (theaterId) {
+            query = { movie_theater_id: theaterId };
+        }
+
+        // Tìm phòng khớp với điều kiện
+        const rooms = await Room.find(query);
+
+        if (rooms.length === 0) {
+            return res.status(200).json({
+                message: "Chưa có phòng nào",
+                data: []
+            });
+        }
+
+        // --- XỬ LÝ ĐẶT TÊN CHO ROOM (NẾU THIẾU) ---
+        // Map qua danh sách, tạo tên giả lập nếu DB trống tên
+        const formattedRooms = rooms.map((room, index) => {
+            const roomObj = room.toObject(); // Chuyển Mongoose Document sang Object thường
+            return {
+                ...roomObj,
+                // Nếu không có tên thì đặt là "Hall X"
+                name: roomObj.name || `Hall ${index + 1}` 
+            };
+        });
+
+        return res.status(200).json({
+            message: "Lấy danh sách phòng thành công",
+            data: formattedRooms
+        });
+
+    } catch (error) {
+        console.log("Lỗi BE lấy danh sách phòng: ", error);
+        return res.status(500).json({
+            message: "Lỗi Server (BE)",
+            error: error.message
+        });
+    }
+}
+
 exports.edit = async (req, res) => {
     try {
         // Tìm được model Rạp --- Theater để Edit (Từ FE -> BE)

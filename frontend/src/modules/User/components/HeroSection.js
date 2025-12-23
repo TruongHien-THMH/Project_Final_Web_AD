@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; 
+import { useNavigate } from 'react-router-dom';
 import { FaCalendarAlt, FaClock, FaArrowRight, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const HeroSection = () => {
@@ -7,15 +8,15 @@ const HeroSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  const navigate = useNavigate();
+
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        // SỬA DÒNG NÀY:
         const res = await axios.get("http://localhost:5001/api/cinema/slider");
         
-        console.log("Dữ liệu nhận được:", res.data); // Log ra để kiểm tra
         setMovies(res.data);
         setLoading(false);
       } catch (error) {
@@ -43,13 +44,16 @@ const HeroSection = () => {
     setCurrentIndex((prev) => (prev === 0 ? movies.length - 1 : prev - 1));
   };
 
+  const handleGoToDetail = (movieId) => {
+      navigate(`/movie/${movieId}`);
+  };
+
   // Nếu đang loading hoặc không có phim
   if (loading) return <div className="h-screen bg-black flex items-center justify-center text-white">Loading...</div>;
   if (movies.length === 0) return <div className="h-screen bg-black text-white">No movies found.</div>;
 
   const currentMovie = movies[currentIndex];
 
-  // Xử lý link ảnh (kiểm tra xem trong DB lưu full link hay chỉ path)
   const bgImage = currentMovie.poster_path?.startsWith('http') 
     ? currentMovie.poster_path 
     : `${IMAGE_BASE_URL}${currentMovie.poster_path}`;
@@ -69,7 +73,10 @@ const HeroSection = () => {
       <div className="relative z-10 h-full flex items-center px-10 md:px-20">
         <div className="max-w-2xl animate-fade-in">
           
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight drop-shadow-lg">
+          <h1 
+            onClick={() => handleGoToDetail(currentMovie.id)}
+            className="text-4xl md:text-6xl font-bold mb-4 leading-tight drop-shadow-lg cursor-pointer hover:text-rose-500 transition-colors"
+          >
             {currentMovie.title || currentMovie.original_title}
           </h1>
 
@@ -91,8 +98,11 @@ const HeroSection = () => {
           </p>
 
           <div className="flex gap-4">
-            <button className="bg-rose-600 hover:bg-rose-700 transition-all px-8 py-3 rounded-full font-bold flex items-center gap-2 shadow-lg hover:scale-105">          
-              Watch Now
+            <button 
+              onClick={() => handleGoToDetail(currentMovie.id)}
+              className="bg-rose-600 hover:bg-rose-700 transition-all px-8 py-3 rounded-full font-bold flex items-center gap-2 shadow-lg hover:scale-105"
+            >          
+              Get Ticket / Details
               <FaArrowRight />
             </button>
             {/* Nút phụ nếu cần */}

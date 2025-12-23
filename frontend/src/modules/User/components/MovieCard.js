@@ -1,35 +1,33 @@
-// File: src/modules/User/components/MovieCard.js
-
 import { Link } from "react-router";
 import { Toaster, toast } from 'sonner';
 
-// CHỈNH SỬA: Nhận prop 'data' thay vì 'movieList'
-// Và đây không còn là mảng nữa, mà là MỘT đối tượng phim duy nhất.
 const MovieCard = ({ data }) => { 
     
-    // Kiểm tra an toàn: Nếu data không tồn tại, không render gì cả
     if (!data) {
         return null;
     }
 
-    // Gán đối tượng phim đã nhận cho biến 'movie' để dễ dùng lại code cũ
     const movie = data;
+    // Của Anh Hiển
+    const getImage = (path) => {
+        if (!path) return "https://via.placeholder.com/300x450?text=No+Image";
+        return path.startsWith('http') 
+            ? path 
+            : `${process.env.REACT_APP_IMAGES}${path}`;
+    };
 
-    // LƯU Ý: Bạn cần kiểm tra xem movie.genres có phải mảng không trước khi map
     const genresList = movie.genres && Array.isArray(movie.genres) 
                        ? movie.genres.map(genre => genre.name).join(', ') 
                        : 'N/A';
 
     return (
-        // LOẠI BỎ VÒNG LẶP .map và .length
         <div className="bg-[#141414] rounded-xl overflow-hidden shadow-lg hover:scale-[1.02] transition">
             <Link
                 to={`/movie/${movie.id}`}
             >
                 <div className="h-56 bg-gray-700 flex items-center justify-center text-5xl font-bold">
                     <img 
-                        // Sửa lại movie.poster_path thành movie.backdrop_path hoặc tùy thuộc vào API của bạn
-                        src={`${process.env.REACT_APP_IMAGES}${movie.poster_path}`} 
+                        src={getImage(movie.poster_path)} 
                         alt={movie.title || movie.original_title}
                         className="w-full h-full object-cover"
                     />

@@ -4,7 +4,11 @@ import { useAuth } from '../context/AuthContext';
 import ForbiddenPage from '../modules/User/pages/ForbiddenPage';
 
 const AdminRoute = () => {
-    const { user } = useAuth();
+    const { user, loading} = useAuth();
+
+    if (loading) {
+        return <div className="h-screen bg-black text-white flex items-center justify-center">Đang kiểm tra quyền...</div>;
+    }
 
     // 1. Kiểm tra đăng nhập
     // Nếu chưa có user -> Đá về trang chủ (hoặc trang login tùy bạn)
