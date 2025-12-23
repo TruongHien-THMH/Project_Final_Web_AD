@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import BlurCircle from '../components/BlurCircle';
-import API_ADMIN_SCHEDULES from '../../../api/Admin/api.admin.schedule';
+import API_SCHEDULES from '../../../api/User/api.schedule';
 import API_BOOK from '../../../api/User/api.book';
 
 import { useAuth } from '../../../context/AuthContext';
@@ -51,7 +51,7 @@ const SeatBookingPage = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const res = await API_ADMIN_SCHEDULES.get(`/seatbooking/${scheduleId}`);
+        const res = await API_SCHEDULES.get(`/seatbooking/${scheduleId}`);
         const data = res.data.data;
         
         setBookedSeats(data.booked_seats || []);

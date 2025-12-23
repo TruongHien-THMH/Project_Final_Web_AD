@@ -13,15 +13,28 @@ const MovieDetail = ({ movie }) => {
     );
   }
 
+  const getPoster = (path) => {
+      if(!path) return null;
+      return path.startsWith('http') ? path : `https://image.tmdb.org/t/p/w500${path}`;
+  }
+
+  const getProfile = (path) => {
+      if(!path) return null;
+      return path.startsWith('http') ? path : `${process.env.REACT_APP_IMAGES || "https://image.tmdb.org/t/p/w200"}${path}`;
+  }
+
 
   const movieData = {
     title: movie.title || "No Title",
-    language: "ENGLISH", // Bổ sung sau
+    language: "ENGLISH", 
     rating: movie.vote_average ? movie.vote_average.toFixed(1) : "N/A",
     description: movie.overview || "No description available",
-    duration: movie.runtime || "Not update yet" , 
-    // genres_ids: movie.genre_ids ? ["Action", "Adventure"] : ["Unknown"], // Láy từ API GENRE hoặc Detail
-    genres: movie.genres.map(g => g.name), // Láy từ API GENRE hoặc Details
+    duration: movie.runtime || "Not updated yet" , 
+    // --- FIX LỖI GENRE MAP ---
+    // Kiểm tra kỹ genres có phải mảng không trước khi map
+    genres: (movie.genres && Array.isArray(movie.genres)) 
+            ? movie.genres.map(g => g.name) 
+            : ["General"], 
     releaseDate: movie.release_date ? new Date(movie.release_date).toLocaleDateString() : "Unknown",
     poster_path: movie.poster_path
   };
@@ -32,7 +45,7 @@ const MovieDetail = ({ movie }) => {
         <div className="w-full md:w-1/3">
           {movieData.poster_path ? (
             <img 
-              src={`https://image.tmdb.org/t/p/w500${movieData.poster_path}`} 
+              src={getPoster(movieData.poster_path)} 
               alt={movieData.title}
               className="w-full h-auto rounded-xl shadow-2xl"
             />
@@ -82,37 +95,37 @@ const MovieDetail = ({ movie }) => {
         <h2 className="text-xl font-semibold mb-6">Cast</h2>
 
         <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar fade-edge">
-          {movie.credits.cast.slice(0, 15).map((actor) => (
-            <div 
-              key={actor.cast_id} 
-              className="flex-shrink-0 w-[140px] group cursor-pointer" 
-            >
-              <div className="w-[140px] h-[175px] rounded-xl overflow-hidden mb-3 shadow-lg relative bg-gray-800">
-                {actor.profile_path ? (
-                  <img
-                    src={`${process.env.REACT_APP_IMAGES || "https://image.tmdb.org/t/p/w200"}${actor.profile_path}`}
-                    alt={actor.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out"
-                    loading="lazy"
-                  />
-                ) : (
-                  
-                  <div className="w-full h-full flex items-center justify-center bg-gray-700 text-gray-500 font-bold text-3xl">
-                    {actor.name.charAt(0)}
+          {movie.credits && movie.credits.cast && movie.credits.cast.length > 0 ? (
+              movie.credits.cast.slice(0, 15).map((actor) => (
+                <div key={actor.cast_id} className="flex-shrink-0 w-[140px] group cursor-pointer">
+                  <div className="w-[140px] h-[175px] rounded-xl overflow-hidden mb-3 shadow-lg relative bg-gray-800">
+                    {/* SỬ DỤNG HÀM getProfile */}
+                    {actor.profile_path ? (
+                      <img
+                        src={getProfile(actor.profile_path)}
+                        alt={actor.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-700 text-gray-500 font-bold text-3xl">
+                        {actor.name ? actor.name.charAt(0) : "?"}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-
-              <div className="px-1">
-                <h3 className="text-white font-semibold text-sm truncate group-hover:text-rose-500 transition-colors">
-                    {actor.name || actor.original_name}
-                </h3>
-                <p className="text-xs text-gray-400 truncate">
-                    {actor.character}
-                </p>
-              </div>
-            </div>
-          ))}
+                  <div className="px-1">
+                    <h3 className="text-white font-semibold text-sm truncate group-hover:text-rose-500 transition-colors">
+                        {actor.name || actor.original_name}
+                    </h3>
+                    <p className="text-xs text-gray-400 truncate">
+                        {actor.character}
+                    </p>
+                  </div>
+                </div>
+              ))
+          ) : (
+              <p className="text-gray-500">Cast info not available for custom movies.</p>
+          )}
         </div>
       </div>
     </section>

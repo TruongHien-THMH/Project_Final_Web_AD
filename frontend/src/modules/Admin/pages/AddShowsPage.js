@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MovieSelectionCard from '../components/MovieSelectionCard';
 import axios from 'axios';
 import API from '../../../api/User/api.client';
+import MaintenancePage from '../components/MaintenancePage';
 
 const AddShowsPage = () => {
   const [selectedDate, setSelectedDate] = useState('');
@@ -12,6 +13,9 @@ const AddShowsPage = () => {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
+  const [isMaintenance, setIsMaintenance] = useState(true);
+
+  
   const selectedMovieInfo = selectedMovie 
     ? movieBuffer.find(m => m._id === selectedMovie) 
     : null;
@@ -122,6 +126,10 @@ const AddShowsPage = () => {
         <div className="text-gray-300">Loading movies...</div>
       </div>
     );
+  }
+
+  if (isMaintenance) {
+      return <MaintenancePage pageName="Add Shows" />;
   }
 
   return (

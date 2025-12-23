@@ -28,15 +28,29 @@ exports.getMovieDetail = async (req, res) => {
 
         const movieDetailTMDB = await movieTMDBRespone.json();
 
-        // console.log('Data hiện tại: ', movieDetailTMDB);
-
-        // const movieDetail = await Movies.findById( movieId );
         if(!movieDetailTMDB) {
             return res.status(404).json({message: "Không nhận id"})
         }
+
         return res.status(200).json(movieDetailTMDB);
+        
     } catch (error) {
         console.log("Lỗi dịch vụ getMovieDetail: ", error);
         return res.status(500).json({message: "Lỗi khi sử dụng vụ get Movie Detail"});
+    }
+}
+
+exports.getMovieBackUp  = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const movieInDb = await Movies.findOne({ id: id }).populate("genres");
+
+        if (movieInDb) {
+            console.log(`✅ Tìm thấy phim ${id} trong DB. Trả về ngay.`);
+            return res.status(200).json(movieInDb);
+        }
+    } catch (error) {
+        console.log("Lỗi dịch vụ getMovieBackUp: ", error);
+        return res.status(500).json({message: "Lỗi khi sử dụng vụ getMovieBackUp"});
     }
 }

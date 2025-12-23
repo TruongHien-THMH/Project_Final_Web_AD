@@ -16,13 +16,15 @@ export default function MovieList() {
     useEffect(() => {
         const getBEData = async () => {
             try {
-                const res = await API.get('/');
+                const res = await API.get('/'); 
                 console.log("Kết nối BE thành công !!!");
-                setMovies(res.data);
+                // console.log("Dữ liệu nhận được: ", res); JSON 
+                setMovies(res.data); // res.data chứa dữ liệu chính
             } catch (error) {
                 console.error(error);
             }
         }
+        
         getBEData()
     }, [])
 

@@ -5,31 +5,39 @@ import ShowTimeList from "../components/ShowTimeList";
 import Display from "../components/Display";
 
 import API from "../../../api/User/api.client";
-import API_ADMIN_SCHEDULES from '../../../api/Admin/api.admin.schedule';
+import API_SCHEDULES from '../../../api/User/api.schedule';
 
 const MoviePage = () => {
 
     const {id} = useParams();
 
     const [detail, setDetail] = useState(null)
-
     const [schedules, setSchedules] = useState([]);
 
     const getDetail = async () => {
         try {
             // const res = await API.get(`/movie/${id}`)
-            const [resMovies, resMovieTheaters] = await Promise.all([
+            const [resMovies, resSchedules] = await Promise.all([
                 API.get(`/movie/${id}`),
-                API_ADMIN_SCHEDULES.get(`/${id}`)
+                API_SCHEDULES.get(`/${id}`)
             ])
-
-            console.log("Dữ liệu từ resMovies: ", resMovies.data);
-            console.log("Dữ liệu từ resMovieTheaters: ", resMovieTheaters.data.data);
-
-            const data = await resMovies.data;
-
-            setDetail(data);
-            setSchedules(resMovieTheaters.data.data);
+            // Của Anh Hiển
+            if(resMovies.data && resMovies.data.success === false && resMovies.data.status_code === 34){
+                try {
+                    const resBackup = await API.get(`/movie/db/${id}`);
+                    
+                    if(resBackup.data) {
+                        console.log("✅ Đã lấy được dữ liệu từ Backup DB.");
+                        setDetail(resBackup.data);
+                    }
+                } catch (backupError) {
+                    console.error("❌ Lỗi: Không tìm thấy phim ở cả TMDB lẫn DB Backup.", backupError);
+                }
+            } else {
+                const data = await resMovies.data;
+                setDetail(data);
+            }
+            setSchedules(resSchedules.data.data);
 
         } catch (error) {
             console.log("Lỗi khi gọi hàm getDetail từ MoviePage ", error);
